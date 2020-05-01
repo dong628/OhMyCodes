@@ -17,6 +17,7 @@ int qpow(int a, int b, int m){
 }
 
 int main(){
+	freopen("data.in", "r", stdin);
 	int z, m, a, b, h, sum;
 	scanf("%d", &z);
 	for(int x=0; x<z; x++){
@@ -27,7 +28,7 @@ int main(){
 			sum += qpow(a, b, m);
 			sum %= m;
 		}
-		printf("%d", sum);
+		printf("%d\n", sum);
 	}
 
 	return 0;
