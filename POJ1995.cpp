@@ -1,9 +1,10 @@
 #include <iostream>
 #include <cstdio>
+#define ull long long
 using namespace std;
 
-int qpow(int a, int b, int m){
-	int base=a, ans=1;
+ull qpow(ull a, ull b, ull m){
+	ull base=a, ans=1;
 	while(b){
 		if(b&1){
 			ans *= base;
@@ -18,17 +19,17 @@ int qpow(int a, int b, int m){
 
 int main(){
 	freopen("data.in", "r", stdin);
-	int z, m, a, b, h, sum;
-	scanf("%d", &z);
+	ull z, m, a, b, h, sum;
+	scanf("%lld", &z);
 	for(int x=0; x<z; x++){
 		sum = 0;
-		scanf("%d", &m); scanf("%d", &h);
+		scanf("%lld", &m); scanf("%lld", &h);
 		for(int i=0; i<h; i++){
-			scanf("%d %d", &a, &b);
+			scanf("%lld %lld", &a, &b);
 			sum += qpow(a, b, m);
 			sum %= m;
 		}
-		printf("%d\n", sum);
+		printf("%lld\n", sum);
 	}
 
 	return 0;
