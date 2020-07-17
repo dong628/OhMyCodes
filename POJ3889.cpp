@@ -7,7 +7,7 @@
 using namespace std;
 
 int t, n;
-ull l, h, o;
+ull l, h, o, xc, yc;
 struct Point{
 	ull x;
 	ull y;
@@ -16,27 +16,30 @@ struct Point{
 Point calc(int, ull);
 
 int main(){
-	freopen("data.in", "r", stdin);
+//	freopen("my.out", "w", stdout);
+//	freopen("data.in", "r", stdin);
 	scanf("%d", &t);
 	for(int x=0; x<t; x++){
 		scanf("%d %llu %llu", &n, &h, &o);
 		Point a=calc(n, h-1);
 		Point b=calc(n, o-1);
-		l = (ull)(sqrt(double((a.x-b.x)*(a.x-b.x)*100+(a.y-b.y)*(a.y-b.y)*100))+0.5);
-		printf("%llu\n", l);
+		xc=a.x-b.x; yc=a.y-b.y;
+		printf("%.0f\n", double(sqrt(xc*xc+yc*yc))*10);
+//		printf("%llu\n", l);
 	}
 
 	return 0;
 }
 
 Point calc(int level, ull nu){
-	if(level==1){
-		switch(nu){
+	if(level==0){
+/*		switch(nu){
 			case 0 : p.x=0; p.y=0; break; 
 			case 1 : p.x=0; p.y=1; break; 
 			case 2 : p.x=1; p.y=1; break; 
 			case 3 : p.x=1; p.y=0; break; 
-		};
+		}; */
+		p.x=0; p.y=0;
 		return p;
 	}
 	else{
