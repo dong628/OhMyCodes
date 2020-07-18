@@ -4,7 +4,8 @@
 #define MAX 100005
 using namespace std;
 
-int n, m, t, flag, row[MAX], col[MAX], s[MAX], x, y, l, r, ans;
+int n, m, t, flag, row[MAX], col[MAX], s[MAX], x, y;
+long long l, r, ans;
 
 int main(){
 	freopen("data.in", "r", stdin);
@@ -24,7 +25,7 @@ int main(){
 	}
 	if(flag&1){
 		s[0]=row[0]-t/n;
-		for(int i=1; i<n; i++) s[i]=s[i-1]+row[i];
+		for(int i=1; i<n; i++) s[i]=s[i-1]+(row[i]-t/n);
 		sort(s, s+n);
 		for(int i=0; i<n/2; i++) l+=s[i];
 		for(int i=n/2; i<n; i++) r+=s[i];
@@ -34,14 +35,14 @@ int main(){
 	l=0; r=0;
 	if(flag>=2){
 		s[0]=col[0]-t/m;
-		for(int i=1; i<m; i++) s[i]=s[i-1]+col[i];
+		for(int i=1; i<m; i++) s[i]=s[i-1]+(col[i]-t/m);
 		sort(s, s+m);
 		for(int i=0; i<m/2; i++) l+=s[i];
 		for(int i=m/2; i<m; i++) r+=s[i];
 		if(m&1) r-=s[m/2];
 		ans += r-l;
 	}
-	printf("%d", ans);
+	printf("%lld", ans);
 	
 	return 0;
 }
