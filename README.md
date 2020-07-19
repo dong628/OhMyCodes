@@ -9,3 +9,6 @@
 ### 博客园：[https://www.cnblogs.com/dong628/](https://www.cnblogs.com/dong628/)
 
 ### 洛谷：[https://www.luogu.com.cn/blog/tfls-djl/](https://www.luogu.com.cn/blog/tfls-djl/)（早期作品）
+
+### Hexo：[https://dong628.github.io/](https://dong628.github.io/)（效果更好，但国内访问慢）
+
