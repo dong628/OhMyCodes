@@ -8,7 +8,7 @@ int start[MAX], end[MAX], temp[MAX];
 void MergeSort(int*, int);
 
 int main(){
-	freopen("data.in", "r", stdin);
+//	freopen("data.in", "r", stdin);
 
 	while(scanf("%d", &n) != EOF){
 		if(n==1){
