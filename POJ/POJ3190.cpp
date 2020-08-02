@@ -5,6 +5,7 @@
 #include <functional>
 using std::priority_queue;
 using std::vector;
+using std::sort;
 using std::greater;
 typedef std::pair<int,int> pint;
 
@@ -27,12 +28,13 @@ int main(){
 		scanf("%d %d", &cow[i].start, &cow[i].end);
 		cow[i].nu=i;
 	}
-	std::sort(cow, cow+n, cmp);
+	sort(cow, cow+n, cmp);
 	for(int i=0; i<n; i++){
 		if(!cl.empty() && cl.top().first<cow[i].start){
 			ans[cow[i].nu]=cl.top().second;
 			cl.pop();
-			tmp.first=cow[i].end; tmp.second=cl.size();
+			tmp.first=cow[i].end; // tmp.second=cl.size();
+			tmp.second=ans[cow[i].nu];
 			cl.push(tmp);
 			
 		}
