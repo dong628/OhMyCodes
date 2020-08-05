@@ -10,10 +10,12 @@ bool cmp(Dc x, Dc y){
 	return x.left*x.right < y.left*y.right;
 }
 void calc(void);
-long long ans, p[Maxn];
+long long ans, p[Maxn], pold, pnew;
 int n, a, b;
 
 int main(){
+	freopen("data.in", "r", stdin);
+
 	scanf("%d %d %d", &n, &a, &b);
 	for(int i=0; i<n; i++){
 		scanf("%d %d", &dc[i].left, &dc[i].right);
@@ -26,14 +28,26 @@ int main(){
 
 void calc(void){
 	long long tmp, max;
-	p[0]=a;
+	pold=a;
+	max=pold/dc[0].right;
+	for(int i=1; i<n; i++){
+		pnew=pold*dc[i-1].left;
+		tmp=pnew/dc[i].right;
+		max=tmp>max?tmp:max;
+		pold=pnew;
+	}
+
+/*	p[0]=a;
+	max=p[0]/dc[0].right;
 	for(int i=1; i<n; i++){
 		p[i]=p[i-1]*dc[i-1].left;
-	}
-	max=p[0]/dc[0].right;
+		tmp=p[i]/dc[i].right;
+		max=tmp>max?tmp:max;
+	}*/
+/*	max=p[0]/dc[0].right;
 	for(int i=1; i<n; i++){
 		tmp=p[i]/dc[i].right;
 		max=tmp>max?tmp:max;
-	}
+	}*/
 	printf("%lld", max);
 }
