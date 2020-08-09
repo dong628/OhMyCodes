@@ -1,4 +1,6 @@
-# 《算法竞赛进阶指南》例题/练习题 代码
+# 我的刷题记录&代码
+
+# 当前主题库：《算法竞赛进阶指南》
 
 文件名为题目来源，[AcWing](https://www.acwing.com/problem/search/1/?csrfmiddlewaretoken=E5g0iLmp8axmebMfPvQo7bCK1LLBfHWdxtJ7wBnfK2uN98UUDYvtHL4iv6PlYpNd&search_content=%E7%AE%97%E6%B3%95%E7%AB%9E%E8%B5%9B%E8%BF%9B%E9%98%B6%E6%8C%87%E5%8D%97)上有所有的题目，但大多数非原创，部分题目可以到vjudge上提交（例如POJ上的）。
 
@@ -12,3 +14,6 @@
 
 ### Hexo：[https://dong628.github.io/](https://dong628.github.io/)（效果更好，但国内访问慢）
 
+
+
+（2020.8.9更新）
