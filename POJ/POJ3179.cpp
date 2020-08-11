@@ -2,7 +2,7 @@
 #include <iostream>
 using std::max;
 
-const int Max=18;
+const int Max=10005;
 const int Inf=0x7fffffff;
 int mapp[Max][Max], x, y, c, n, s[Max][Max];
 int xmax, ymax, xmin=Inf, ymin=Inf;
@@ -21,8 +21,8 @@ int main(){
 		xmin = xmin<x?xmin:x;
 		ymin = ymin<y?ymin:y;
 	}
-	for(int i=xmin; i<=xmax; i++)
-		for(int j=ymin; j<=ymax; j++)
+	for(int i=xmin; i<=Max-5; i++)
+		for(int j=ymin; j<=Max-5; j++)
 			s[i][j] = mapp[i][j]+s[i-1][j]+s[i][j-1]-s[i-1][j-1];
 	lb();
 
@@ -42,8 +42,8 @@ void lb(void){
 
 bool judge(int l){
 	int tmp;
-	for(int i=xmin-1; i<=max(xmax-l+1,xmin-1); i++){
-		for(int j=ymin-1; j<=max(ymax-l+1,ymin-1); j++){
+	for(int i=xmin-1; i<=xmax; i++){
+		for(int j=ymin-1; j<=ymax; j++){
 			tmp=s[i+l][j+l]-s[i+l][j]-s[i][j+l]+s[i][j];
 			if(tmp>=c) return true;
 		}
