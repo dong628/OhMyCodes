@@ -3,8 +3,8 @@
 #include <algorithm>
 
 const int Max=1000005;
-int n, summ, ss, z, a[Max], s[Max];
-long long ans;
+int n, ss, z, a[Max], s[Max];
+long long summ, ans;
 inline int abs(int a) { return a>0?a:-a; }
 
 int main(){
