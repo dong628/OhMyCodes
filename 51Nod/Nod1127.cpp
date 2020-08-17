@@ -1,16 +1,17 @@
 #include <bits/stdc++.h>
-using std::string;
+using namespace std;
 
+const int Max=100005;
 int h[27], n;
-string a;
+char a[Max], tmp;
 bool search(int);
 bool judge(void);
 
 int main(){
-//	freopen("data.in", "r", stdin);
-
-	std::cin >> a;
-	n=a.size();
+	freopen("data.in", "r", stdin);
+	
+	gets(a);
+	n=strlen(a);
 	for(int i=0; i<n; i++){
 		h[a[i]-'A']++;
 	}
