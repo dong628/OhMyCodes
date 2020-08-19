@@ -12,6 +12,7 @@ bool judge(int);
 
 int main(){
 	freopen("surreal.in", "r", stdin);
+	freopen("surreal.out", "w", stdout);
 	
 	int N, m, maxh; bool flag;
 	scanf("%d", &N);

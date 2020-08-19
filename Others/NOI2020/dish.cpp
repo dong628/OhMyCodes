@@ -15,6 +15,7 @@ int mini(void);
 
 int main(){
 	freopen("dish.in", "r", stdin);
+	freopen("dish.out", "w", stdout);
 	int t;
 	scanf("%d", &t);
 	for(int x=0; x<t; x++){
@@ -46,6 +47,7 @@ void dfs(int step){
 	}
 	else{
 		int now=mini();
+		int dn=d[now];
 		if(d[now]>=k){
 			logg[step][0]=now;
 			logg[step][1]=k;
@@ -59,8 +61,10 @@ void dfs(int step){
 				logg[step][2]=i;
 				logg[step][3]=k-d[now];
 				d[i]-=k-d[now];
+				d[now]=0;
 				dfs(step+1);
 				d[i]+=k-d[now];
+				d[now]=dn;
 			}
 		}
 	}
