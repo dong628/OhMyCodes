@@ -41,7 +41,7 @@ void dijkstra(int start) {
 
 
 int main() {
-//	freopen("data.in", "r", stdin);
+	freopen("data.in", "r", stdin);
 
 	scanf("%d", &t);
 	for(int xxx=0; xxx<t; xxx++){
