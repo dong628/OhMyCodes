@@ -3,11 +3,7 @@
 #include <algorithm>
 
 const int Maxn=1e5+5, Mod=1e8-3;
-int n, a[Maxn], c[Maxn];
-struct Node{
-	int first, second;
-}b[Maxn];
-bool cmp(Node x, Node y) { return x.first<y.first; }
+int n, a[Maxn], c[Maxn], b[Maxn], d[Maxn], ma[Maxn], hash[Maxn];
 int MergeSort(int l, int r);
 
 int main(){
@@ -15,15 +11,28 @@ int main(){
 
 	scanf("%d", &n);
 	for(int i=1; i<=n; i++){
-		scanf("%d", &b[i].first);
+		scanf("%d", &b[i]);
+		hash[i]=b[i];
+	}
+	std::sort(hash+1, hash+1+n);
+	for(int i=1; i<=n; i++){
+		b[i] = std::lower_bound(hash+1, hash+1+n, b[i])-hash;
+	}
+	for(int i=1; i<=n; i++) ma[b[i]]=i;
+
+	for(int i=1; i<=n; i++){
+		scanf("%d", &d[i]);
+		hash[i]=d[i];
+	}
+	std::sort(hash+1, hash+1+n);
+	for(int i=1; i<=n; i++){
+		d[i] = std::lower_bound(hash+1, hash+1+n, d[i])-hash;
 	}
 	for(int i=1; i<=n; i++){
-		scanf("%d", &b[i].second);
+		a[i]=ma[d[i]];
 	}
-	std::sort(b+1, b+n+1, cmp);
-	for(int i=1; i<=n; i++){
-		a[i] = b[i].second;
-	}
+
+	
 	printf("%d", MergeSort(1, n)%Mod);
 
 
