@@ -1,0 +1,47 @@
+#include <cstdio>
+#include <iostream>
+
+const int Max=1000;
+int mapp[Max+5][Max+5], r1, r2, c1, c2, tmp, summ;
+long long search(int, int, int, int);
+void init(void);
+
+int main(){
+	freopen("tears.in", "r", stdin);
+	
+	int n, m;
+	scanf("%d%d", &n, &m);
+	for(int i=1; i<=n; i++){
+		scanf("%d", &tmp);
+		mapp[i][tmp]++;
+	}
+	init();
+	long long t;
+	for(int i=0; i<m; i++){
+		scanf("%d %d %d %d", &r1, &r2, &c1, &c2);
+		t=search(r1, r2, c1, c2);
+		printf("%lld", t);
+	}
+
+	return 0;
+}
+
+void init(void){
+	for(int i=1; i<=Max; i++){
+		mapp[i][0] += mapp[i-1][0];
+	}
+	for(int i=1; i<=Max; i++){
+		mapp[0][i] += mapp[0][i-1];
+	}
+	for(int i=1; i<=Max; i++){
+		for(int j=1; j<=Max; j++){
+			mapp[i][j] += mapp[i-1][j]+mapp[i][j-1]-mapp[i-1][j-1];
+		}
+	}
+}
+
+long long search(int x1, int y1, int x2, int y2){
+	long long ans=1;
+	summ=mapp[x2][y2]-mapp[x2][y1]-mapp[x1][y2]+mapp[x1][y1];
+
+}
