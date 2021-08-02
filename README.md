@@ -1,8 +1,8 @@
 # 我的刷题记录&代码
 
-# 当前主题库：《算法竞赛进阶指南》
+# 当前主题库：洛谷-全程NOIP计划
 
-文件名为题目来源，[AcWing](https://www.acwing.com/problem/search/1/?csrfmiddlewaretoken=E5g0iLmp8axmebMfPvQo7bCK1LLBfHWdxtJ7wBnfK2uN98UUDYvtHL4iv6PlYpNd&search_content=%E7%AE%97%E6%B3%95%E7%AB%9E%E8%B5%9B%E8%BF%9B%E9%98%B6%E6%8C%87%E5%8D%97)上有所有的题目，但大多数非原创，部分题目可以到vjudge上提交（例如POJ上的）。
+题目按照所属OJ分类归档。洛谷RemoteJudge只有CodeForces会放入对应目录。
 
 使用git管理代码，可以在写错的时候快速回滚到之前版本，还可以上传至远端仓库，在多台机器同步。
 
@@ -16,4 +16,4 @@
 
 
 
-（2020.8.9更新）
+（2021.7.31更新）
