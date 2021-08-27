@@ -3,7 +3,7 @@
 #include <vector>
 #include <cstring>
 
-const int Maxn=1e2+5, Maxm=1e5+5;
+const int Maxn=1e4+5, Maxm=1e5+5;
 struct Edge{
 	int u, v;
 } edge[Maxm];
@@ -20,7 +20,7 @@ int min(int xx, int yy) { return xx<yy?xx:yy; }
 int max(int xx, int yy) { return xx>yy?xx:yy; }
 
 int main(){
-	freopen("data.in", "r", stdin);
+//	freopen("data.in", "r", stdin);
 
 	scanf("%d %d", &n, &m);
 	for(int i=1; i<=n; i++){
@@ -86,7 +86,9 @@ int main(){
 		}
 	}
 */
-	dp[tp[0]] = summ[tp[0]];
+	for(int i=0; i<scnt; i++){
+		dp[i] = summ[i];
+	}
 	for(int i=1; i<scnt; i++){
 		for(int j=0; j<rdrcnt2[tp[i]]; j++){
 			dp[tp[i]] = max(dp[tp[i]], dp[rdr[tp[i]][j]]+summ[tp[i]]);
