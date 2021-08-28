@@ -3,7 +3,7 @@
 #include <vector>
 using std::vector;
 
-const int Maxn=105;
+const int Maxn=205;
 struct Edge{
 	int u, v;
 } edge[Maxn*Maxn];
@@ -52,12 +52,12 @@ int main(){
 		if(cd[i]==0) cntcd++;
 	}
 	printf("%d\n", cntrd);
-	if(cnts==1){
+/*	if(cnts==1){
 		printf("0\n");
 	}
 	else{
 		printf("%d\n", max(cntrd, cntcd));
-	}
+	}*/
 
 	return 0;
 }
