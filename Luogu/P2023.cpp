@@ -18,22 +18,22 @@ int main(){
 	freopen("data.in", "r", stdin);
 
 	scanf("%d %lld", &n, &Mod);
-	for(int i=0; i<n; i++) scanf("%lld", &a[i]);
-	build(0, 0, n-1);
+	for(int i=1; i<=n; i++) scanf("%lld", &a[i]);
+	build(1, 1, n);
 	scanf("%d", &m);
 	for(int csm=0; csm<m; csm++){
 		scanf("%d", &tp);
 		if(tp==1){
 			scanf("%d %d %lld", &t, &g, &c);
-			mul(0, t, g, c);
+			mul(1, t, g, c);
 		}
 		else if(tp==2){
 			scanf("%d %d %lld", &t, &g, &c);
-			add(0, t, g, c);
+			add(1, t, g, c);
 		}
 		else{
 			scanf("%d %d", &t, &g);
-			printf("%lld\n", sig(0, t, g));
+			printf("%lld\n", sig(1, t, g));
 		}
 	}
 
@@ -48,14 +48,16 @@ void build(int root, int l, int r){
 		return;
 	}
 	build(root<<1, l, (l+r)>>1);
-	build(root<<1+1, (l+r)>>1+1, r);
-	seg[root].val = seg[root<<1].val+seg[root<<1+1].val;
+	build((root<<1)+1, ((l+r)>>1)+1, r);
+	seg[root].val = (seg[root<<1].val+seg[(root<<1)+1].val)%Mod;
 }
 
 void add(int root, int l, int r, lol addv){
 	if(seg[root].l==l && seg[root].r==r){
-		seg[root].val += (seg[root].r-seg[root].l+1)*addv%Mod;
+		seg[root].val += (r-l+1)*addv%Mod;
+		seg[root].val %= Mod;
 		seg[root].taga += addv%Mod;
+		seg[root].taga %= Mod;
 		return;
 	}
 	update(root);
@@ -64,10 +66,11 @@ void add(int root, int l, int r, lol addv){
 		add(root<<1, l, min(seg[root<<1].r, r), addv);
 	}
 	seg[root].val += seg[root<<1].val;
-	if(seg[root<<1+1].l<=r){
-		add(root<<1+1, max(seg[root<<1+1].l, l), r, addv);
+	if(seg[(root<<1)+1].l<=r){
+		add((root<<1)+1, max(seg[(root<<1)+1].l, l), r, addv);
 	}
-	seg[root].val += seg[root<<1+1].val;
+	seg[root].val += seg[(root<<1)+1].val;
+	seg[root].val %= Mod;
 }
 
 void mul(int root, int l, int r, lol mulv){
@@ -86,10 +89,11 @@ void mul(int root, int l, int r, lol mulv){
 		mul(root<<1, l, min(seg[root<<1].r, r), mulv);
 	}
 	seg[root].val += seg[root<<1].val;
-	if(seg[root<<1+1].l<=r){
-		mul(root<<1+1, max(seg[root<<1+1].l, l), r, mulv);
+	if(seg[(root<<1)+1].l<=r){
+		mul((root<<1)+1, max(seg[(root<<1)+1].l, l), r, mulv);
 	}
-	seg[root].val += seg[root<<1+1].val;
+	seg[root].val += seg[(root<<1)+1].val;
+	seg[root].val %= Mod;
 }
 
 lol sig(int root, int l, int r){
@@ -101,8 +105,8 @@ lol sig(int root, int l, int r){
 	if(seg[root<<1].r>=l){
 		ans += sig(root<<1, l, min(seg[root<<1].r, r))%Mod;
 	}
-	if(seg[root<<1+1].l<=r){
-		ans += sig(root<<1+1, max(seg[root<<1+1].l, l), r)%Mod;
+	if(seg[(root<<1)+1].l<=r){
+		ans += sig((root<<1)+1, max(seg[(root<<1)+1].l, l), r)%Mod;
 	}
 	ans%=Mod;
 	return ans;
@@ -111,12 +115,13 @@ lol sig(int root, int l, int r){
 void update(int root){
 	seg[root<<1].val *= seg[root].tagm; seg[root<<1].val %= Mod;
 	seg[root<<1].val += seg[root].taga*(seg[root<<1].r-seg[root<<1].l+1); seg[root<<1].val %= Mod;
-	seg[root<<1+1].val *= seg[root].tagm; seg[root<<1+1].val %= Mod;
-	seg[root<<1+1].val += seg[root].taga*(seg[root<<1+1].r-seg[root<<1+1].l+1); seg[root<<1+1].val %= Mod;
+	seg[(root<<1)+1].val *= seg[root].tagm; seg[(root<<1)+1].val %= Mod;
+	seg[(root<<1)+1].val += seg[root].taga*(seg[(root<<1)+1].r-seg[(root<<1)+1].l+1); seg[(root<<1)+1].val %= Mod;
 	seg[root<<1].taga *= seg[root].tagm; seg[root<<1].taga%=Mod;
 	seg[root<<1].taga += seg[root].taga; seg[root<<1].taga%=Mod;
 	seg[root<<1].tagm *= seg[root].tagm; seg[root<<1].tagm%=Mod;
-	seg[root<<1+1].taga *= seg[root].tagm; seg[root<<1+1].taga%=Mod;
-	seg[root<<1+1].taga += seg[root].taga; seg[root<<1+1].taga%=Mod;
-	seg[root<<1+1].tagm *= seg[root].tagm; seg[root<<1+1].tagm%=Mod;
+	seg[(root<<1)+1].taga *= seg[root].tagm; seg[(root<<1)+1].taga%=Mod;
+	seg[(root<<1)+1].taga += seg[root].taga; seg[(root<<1)+1].taga%=Mod;
+	seg[(root<<1)+1].tagm *= seg[root].tagm; seg[(root<<1)+1].tagm%=Mod;
+	seg[root].taga = 0; seg[root].tagm = 1;
 }
