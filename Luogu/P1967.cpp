@@ -20,6 +20,7 @@ int main(){
 		mapp.push_back(temp);
 	}
 	kruskal();
+	
 
 	return 0;
 }
@@ -29,7 +30,9 @@ void kruskal(void){
 		temp = mapp.top();
 		if(!query(temp.x, temp.y)){
 			merge(temp.x, temp.y);
-			tree[x].push_back()
+			tree[temp.x].push_back(temp);
+			swap(temp.x, temp.y);
+			tree[temp.x].push_back(temp);
 		}
 	}
 }
