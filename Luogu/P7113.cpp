@@ -3,21 +3,24 @@
 #include <vector>
 using std::vector;
 
+typedef unsigned long long lol;
 const int Maxn = 1e5+5;
-int gcd(int xx, int yy){
+lol gcd(lol xx, lol yy){
 	if(xx%yy==0) return yy;
-	return gcd(xx, xx%yy);
+	return gcd(yy, xx%yy);
 }
 struct Ans{
-	int p, q;
+	lol p, q;
 } ans[Maxn];
-void typ(int, int, int);
-int n, m, cnt[Maxn], sp[Maxn], gcdd, c, csp, x;
-bool lsp[Maxn];
+lol cnt[Maxn], gcdd;
+void typ(int, lol, lol);
+int n, m, sp[Maxn], c, csp, x;
+bool lsp[Maxn], sj[Maxn];
 vector<int> mapp[Maxn];
 
 int main(){
 	freopen("data.in", "r", stdin);
+	freopen("data.out", "w", stdout);
 
 	scanf("%d %d", &n, &m);
 	for(int i=1; i<=n; i++){
@@ -34,14 +37,20 @@ int main(){
 		if(lsp[i]==false) sp[csp++]=i;
 	}
 	for(int i=0; i<csp; i++){
-		typ(sp[csp], 1, 1);
+		typ(sp[i], 1, 1);
+	}
+	for(int i=1; i<=n; i++){
+		if(sj[i]){
+			printf("%llu %llu\n", ans[i].p, ans[i].q);
+		}
 	}
 
 	return 0;
 }
 
-void typ(int poi, int p, int q){
+void typ(int poi, lol p, lol q){
 	if(cnt[poi]==0){
+		sj[poi]=true;
 		ans[poi].p *= q;
 		ans[poi].p += ans[poi].q*p;
 		ans[poi].q *= q;
