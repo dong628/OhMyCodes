@@ -2,26 +2,33 @@
 #include <iostream>
 
 const int Maxn = 1e6+5;
-bool buy[Maxn];
-long long n, m, c, k, a[Maxn], orsum, p, q;
+bool vis[Maxn];
+unsigned long long n, m, c, k, a, orsum;
+int p, q;
 
 int main(){
 	freopen("data.in", "r", stdin);
 	freopen("data.out", "w", stdout);
 
-	scanf("%lld %lld %lld %lld", &n, &m, &c, &k);
+	scanf("%llu %llu %llu %llu", &n, &m, &c, &k);
 	for(int i=1; i<=n; i++){
-		scanf("%lld", &a[i]);
-		orsum |= a[i];
+		scanf("%llu", &a);
+		orsum |= a;
 	}
 	for(int i=1; i<=m; i++){
-		scanf("%lld %lld", &p, &q);
-		if(!((1<<p)&orsum)){
-			buy[q] = true;
+		scanf("%d %d", &p, &q);
+		if(!((1ull<<p)&orsum) && (!vis[p])){
+			vis[p] = true;
 			k--;
 		}
 	}
-	printf("%lld", (1<<k)-n);
+	if(k==64 && n==0){
+		printf("18446744073709551616");
+	}
+	else{
+//		printf("%llu %llu\n", k, n);
+		printf("%llu", ((1ull<<k)-n));
+	}
 
 
 	return 0;
