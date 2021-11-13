@@ -1,16 +1,18 @@
 #include <iostream>
 #include <cstdio>
-#include <vector>
-using namespace std;
+#include <algorithm>
+
+int n, a[100], b;
 
 int main(){
-	vector<int> a;
-	a.insert(a.begin(), 3);
-	a.insert(a.begin(), 2);
-	a.insert(a.begin(), 1);
-	a.insert(a.begin()+1, 0);
-	for(int i=0; i<4; i++){
-		printf("%d", a[i]);
+	scanf("%d", &n);
+	for(int i=1; i<=n; i++){
+		scanf("%d", &a[i]);
+	}
+	std::sort(a+1, a+n+1);
+	for(int i=1; i<=n; i++){
+		scanf("%d", &b);
+		printf("%ld\n", std::lower_bound(a+1, a+n+1, b)-a);
 	}
 
 	return 0;
