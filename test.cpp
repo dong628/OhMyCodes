@@ -3,9 +3,10 @@
 #include <algorithm>
 
 int n, b;
-std::deque<int> a;
+int a[n];
 
 int main(){
+	scanf("%d", &n);
 	
 
 	return 0;
