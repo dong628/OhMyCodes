@@ -11,7 +11,7 @@ struct Node{
 	lol val, taga;
 }seg[4*Maxn];
 vector<int> tr[Maxn];
-int n, m, r, p, x, y, timetag, mode;
+int n, m, r, p, x, y, timetag=1, mode;
 int dfn[Maxn], hson[Maxn], cnt[Maxn], rank[Maxn], fa[Maxn], top[Maxn], bottom[Maxn], size[Maxn], depth[Maxn];
 bool vis[Maxn];
 lol a[Maxn], z, hsons[Maxn];
@@ -22,6 +22,7 @@ lol tquery(int, int), sonquery(int), query(int, int, int);
 
 int main(){
 	freopen("data.in", "r", stdin);
+	freopen("data.out", "w", stdout);
 
 	scanf("%d %d %d %d", &n,  &m, &r, &p);
 	for(int i=1; i<=n; i++){
@@ -32,11 +33,12 @@ int main(){
 		tr[x].push_back(y); cnt[x]++;
 		tr[y].push_back(x); cnt[y]++;
 	}
-	dfs1(1);
+	top[r] = r;
+	dfs1(r);
 	memset(vis, 0, sizeof(vis));
-	dfs2(1);
-	build(1, 0, n);
-	for(int i=1; i<m; i++){
+	dfs2(r);
+	build(1, 1, n+1);
+	for(int i=1; i<=m; i++){
 		scanf("%d", &mode);
 		switch(mode){
 			case 1: scanf("%d %d %lld", &x, &y, &z); tadd(x, y, z); break;
@@ -50,6 +52,7 @@ int main(){
 }
 
 void dfs1(int root){
+	size[root] = 1;
 	vis[root] = true;
 	for(int i=0; i<cnt[root]; i++){
 		if(!vis[tr[root][i]]){
@@ -60,7 +63,7 @@ void dfs1(int root){
 				hson[root] = tr[root][i];
 				hsons[root] = size[tr[root][i]];
 			}
-			size[root] = size[tr[root][i]];
+			size[root] += size[tr[root][i]];
 		}
 	}
 }
@@ -70,48 +73,52 @@ void dfs2(int root){
 	rank[timetag] = root;
 	timetag++;
 	vis[root] = true;
+	if(hson[root]!=0){
+		top[hson[root]] = top[root];
+		dfs2(hson[root]);
+	}
 	for(int i=0; i<cnt[root]; i++){
 		if(!vis[tr[root][i]]){
-			if(tr[root][i] == hson[root]){
-				top[tr[root][i]] = top[root];
-			}
-			else{
-				top[tr[root][i]] = tr[root][i];
-			}
+			top[tr[root][i]] = tr[root][i];
 			dfs2(tr[root][i]);
+			bottom[root] = bottom[tr[root][i]];
 		}
 	}
-	if(cnt[root] == 1) bottom[root] = root;
-	else bottom[root] = bottom[tr[root][cnt[root]-1]];
+	if(cnt[root] == 1 && root != r) bottom[root] = root;
 }
 
 void tadd(int x, int y, lol val){
 	while(top[x]!=top[y]){
 		if(depth[top[x]]>depth[top[y]]) swap(x, y);
-		add(1, top[y], y, val);
+		add(1, dfn[top[y]], dfn[y]+1, val);
 		y = fa[top[y]];
 	}
-	add(1, top[x], x, val); add(1, top[y], y, val);
+	if(dfn[x]>dfn[y]) swap(x, y);
+	add(1, dfn[x], dfn[y]+1, val);
+//	add(1, top[x], x+1, val); add(1, dfn[top[y]], y+1, val);
 }
 
 lol tquery(int x, int y){
 	lol ans = 0;
 	while(top[x]!=top[y]){
 		if(depth[top[x]]>depth[top[y]]) swap(x, y);
-		ans += query(1, top[y], y);
+		ans += query(1, dfn[top[y]], dfn[y]+1);
+		ans %= p;
 		y = fa[top[y]];
 	}
-	ans += query(1, hson[top[x]], x); ans += query(1, top[y], y);
+	if(dfn[x]>dfn[y]) swap(x, y);
+	ans += query(1, dfn[x], dfn[y]+1);
+//	ans += query(1, hson[top[x]], x+1); ans += query(1, top[y], y+1);
 	ans %= p;
 	return ans;
 }
 
 void sonadd(int x, lol val){
-	add(1, x, bottom[x], val);
+	add(1, dfn[x], dfn[x]+size[x], val);
 }
 
 lol sonquery(int x){
-	return query(1, x, bottom[x]);
+	return query(1, dfn[x], dfn[x]+size[x]);
 }
 
 void build(int ind, int l, int r){
@@ -122,21 +129,28 @@ void build(int ind, int l, int r){
 	}
 	build(ind<<1, l, (l+r)>>1);
 	build((ind<<1)+1, (l+r)>>1, r);
+	seg[ind].val = seg[ind<<1].val + seg[(ind<<1)+1].val;
+	seg[ind].val %= p;
 }
 
 void add(int ind, int l, int r, lol val){
-	seg[ind].val += val*(r-l+1);
+//	seg[ind].val += val*(r-l);
 	if(seg[ind].l==l && seg[ind].r==r){
+		seg[ind].val += val*(r-l);
+		seg[ind].val %= p;
 		seg[ind].taga += val;
+		seg[ind].taga %= p;
 		return;
 	}
 	update(ind);
 	if(seg[ind<<1].r > l){
-		add(ind<<1, l, min((l+r)>>1, r), val);
+		add(ind<<1, l, min(seg[ind<<1].r, r), val);
 	}
 	if(seg[(ind<<1)+1].l < r){
-		add((ind<<1)+1, max((l+r)>>1, l), r, val);
+		add((ind<<1)+1, max(seg[(ind<<1)+1].l, l), r, val);
 	}
+	seg[ind].val = seg[ind<<1].val + seg[(ind<<1)+1].val;
+	seg[ind].val %= p;
 }
 
 lol query(int ind, int l, int r){
@@ -146,10 +160,12 @@ lol query(int ind, int l, int r){
 	lol ans = 0;
 	update(ind);
 	if(seg[ind<<1].r > l){
-		ans += query(ind<<1, l, min((l+r)>>1, r));
+		ans += query(ind<<1, l, min(seg[ind<<1].r, r))%p;
+		ans %= p;
 	}
 	if(seg[(ind<<1)+1].l < r){
-		ans += query((ind<<1)+1, max((l+r)>>1, l), r);
+		ans += query((ind<<1)+1, max(seg[(ind<<1)+1].l, l), r);
+		ans %= p;
 	}
 	ans %= p;
 	return ans;
@@ -158,7 +174,7 @@ lol query(int ind, int l, int r){
 void update(int ind){
 	seg[ind<<1].taga += seg[ind].taga; seg[ind<<1].taga %= p;
 	seg[(ind<<1)+1].taga += seg[ind].taga; seg[(ind<<1)+1].taga %= p;
-	seg[ind<<1].val += seg[ind].taga*(seg[ind<<1].r-seg[ind<<1].l+1); seg[ind<<1].val %= p;
-	seg[(ind<<1)+1].val += seg[ind].taga*(seg[(ind<<1)+1].r-seg[(ind<<1)+1].l+1); seg[ind<<1].val %= p;
+	seg[ind<<1].val += seg[ind].taga*(seg[ind<<1].r-seg[ind<<1].l)%p; seg[ind<<1].val %= p;
+	seg[(ind<<1)+1].val += seg[ind].taga*(seg[(ind<<1)+1].r-seg[(ind<<1)+1].l)%p; seg[(ind<<1)+1].val %= p;
 	seg[ind].taga = 0;
 }
