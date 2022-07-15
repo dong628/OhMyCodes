@@ -1,4 +1,4 @@
 git add *
-d = $(date)
-git commit -m "d"
+d=$(date)
+git commit -m "$d"
 git push
