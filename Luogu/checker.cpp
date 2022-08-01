@@ -5,9 +5,9 @@
 int main(){
 	while(true){
 		system("./gen");
-		system("./a");
-		system("./b");
-		if(system("diff a.out b.out")){
+		system("./djl");
+		system("./std");
+		if(system("diff std.out djl.out")){
 			return 0;
 		}
 	}

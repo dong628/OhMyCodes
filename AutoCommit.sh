@@ -1,3 +1,6 @@
+#!/bin/sh
+
+
 git add *
 d=$(date)
 git commit -m "$d"

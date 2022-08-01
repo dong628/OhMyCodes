@@ -7,6 +7,7 @@ typedef long long lol;
 const int Maxm = 65, Maxn = 55;
 int n, m, a, b, s, e, cnte, cntend, end[Maxm], eg[2*Maxm][2], cnt[Maxn];
 vector<int> edge[Maxn];
+int fb(int xx) { return xx&1?xx-1:xx+1; }
 lol t, ans;
 const lol Mod=45989;
 struct Matrix{
@@ -26,16 +27,19 @@ struct Matrix{
 	Matrix operator ^ (lol b){
 		Matrix ans, base = *this; ans.n = n; ans.m = m;
 		for(int i=0; i<this->n; i++) ans.val[i][i] = 1;
-				for(int i=0; i<ans.n; i++){
+/*
+		for(int i=0; i<ans.n; i++){
 					for(int j=0; j<ans.m; j++){
 						printf("%d ", ans.val[i][j]);
 					}
 					printf("\n");
 				}
 				printf("--------------------------\n");
+*/
 		while(b){
 			if(b&1){
 				ans = ans * base;
+/*
 				for(int i=0; i<ans.n; i++){
 					for(int j=0; j<ans.m; j++){
 						printf("%d ", ans.val[i][j]);
@@ -43,6 +47,7 @@ struct Matrix{
 					printf("\n");
 				}
 				printf("--------------------------\n");
+*/
 			}
 			base = base * base;
 			b >>= 1;
@@ -69,7 +74,13 @@ int main(){
 	}
 	for(int i=0; i<cnte; i++){
 		for(int j=0; j<cnt[eg[i][1]]; j++){
+/*
 			if(eg[edge[eg[i][1]][j]][1] != eg[i][0]){
+				graph.val[edge[eg[i][1]][j]][i]++;
+				graph.val[edge[eg[i][1]][j]][i] %= Mod;
+			}
+*/
+			if(fb(edge[eg[i][1]][j])!=i){
 				graph.val[edge[eg[i][1]][j]][i]++;
 				graph.val[edge[eg[i][1]][j]][i] %= Mod;
 			}
@@ -77,7 +88,7 @@ int main(){
 	}
 	graph.n = cnte; graph.m = cnte;
 	x.n = cnte; x.m = 1;
-
+/*
 	for(int i=0; i<graph.n; i++){
 		for(int j=0; j<graph.m; j++){
 			printf("%d ", graph.val[i][j]);
@@ -88,21 +99,22 @@ int main(){
 		printf("%d", x.val[i][0]);
 		printf("\n");
 	}
-
+*/
 	aans = graph ^ (t-1);
-	printf("--------------------------\n");
-	for(int i=0; i<aans.n; i++){
+//	printf("--------------------------\n");
+/*	for(int i=0; i<aans.n; i++){
 		for(int j=0; j<aans.m; j++){
 			printf("%d ", aans.val[i][j]);
 		}
 		printf("\n");
-	}
+	}*/
 	x = aans * x;
-
+/*
 	for(int i=0; i<x.n; i++){
 		printf("%d", x.val[i][0]);
 		printf("\n");
 	}
+*/
 /*
 	for(int i=0; i<cntse; i++){
 		for(int j=0; j<cntee; j++){
