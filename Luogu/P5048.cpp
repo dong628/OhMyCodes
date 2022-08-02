@@ -5,7 +5,7 @@
 #include <cstring>
 using std::sort, std::unique, std::lower_bound, std::swap;
 
-const int Maxn = 5e5+5, Maxsq = 750;
+const int Maxn = 5e5+5, Maxsq = 55;
 int a[Maxn], cp[Maxn], cnt[Maxsq][Maxn];
 int start[Maxsq], end[Maxsq], block, num, ret[Maxn], cntu;
 
@@ -25,7 +25,8 @@ int main(){
 	for(int i=0; i<n; i++){
 		a[i] = lower_bound(cp, cp+cntu, a[i])-cp;
 	}
-	block = sqrt(n); num = n/block+1;
+	block = std::min(n, int(sqrt(n)*14));
+	num = n/block+1;
 	for(int i=0; i<num-1; i++){
 		start[i] = i*block;
 		end[i] = (i+1)*block;
