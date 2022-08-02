@@ -7,14 +7,16 @@
 using std::sort, std::unique, std::lower_bound, std::swap;
 
 const int Maxn = 5e5+5, Maxsq = 750;
+//const int Maxn = 1e3+5, Maxsq = 75;
 std::vector<int> mapp[Maxn];
-int a[Maxn], cp[Maxn], cnt[Maxn], unm[Maxn], cntm[Maxn], zs[Maxsq][Maxsq];
+int a[Maxn], cp[Maxn], unm[Maxn], cnt[Maxn], cntm[Maxn], zs[Maxsq][Maxsq];
 int start[Maxsq], end[Maxsq], block, num, ret[Maxn], cntu;
 
 int calc(int l, int r);
 
 int main(){
 	freopen("data.in", "r", stdin);
+	freopen("djl.out", "w", stdout);
 	
 	int n, m;
 	scanf("%d %d", &n, &m);
@@ -36,7 +38,7 @@ int main(){
 		end[i] = (i+1)*block;
 	}
 	if(n%block){
-		start[num] = (num)*block;
+		start[num] = num*block;
 		end[num] = n;
 		num++;
 	}
@@ -48,6 +50,7 @@ int main(){
 				cnt[a[k]]++;
 				zs[i][j] = std::max(zs[i][j], cnt[a[k]]);
 			}
+			zs[i][j+1] = zs[i][j];
 		}
 	}
 
@@ -67,12 +70,17 @@ int main(){
 }
 
 int calc(int l, int r){
-	int lb = l/block, rb = r/block, ans = 0;
+	int lb = l/block, rb = r/block, ans = 1;
 	if(lb+1 <= rb-1) ans = zs[lb+1][rb-1];
 	for(int i=l; i==l||i%block!=0; i++){
-		while(cnt[i]>unm[i]+ans && mapp[i][unm[i]+ans]<=r){
+		while(cntm[a[i]]>unm[i]+ans && mapp[a[i]][unm[i]+ans]<=r){
 			ans++;
 		}
 	}
-	return ans+1;
+	for(int i=start[rb]; i<=r; i++){
+		while(unm[i]>=ans && mapp[a[i]][unm[i]-ans]>=l){
+			ans++;
+		}
+	}
+	return ans;
 }

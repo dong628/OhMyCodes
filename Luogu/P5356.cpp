@@ -36,8 +36,10 @@ int main(){
 
 	int n, m;
 	n = read(); m = read();
+//	scanf("%d %d", &n, &m);
 	for(int i=0; i<n; i++){
 		a[i] = read();
+//		scanf("%d", &a[i]);
 		cp[i] = a[i];
 		maxai = a[i]>maxai?a[i]:maxai;
 	}
@@ -131,9 +133,9 @@ int calc(int l, int r, int k){ // <k
 			else if(k < cp[start[i]]) continue;
 			ll = start[i]; rr = end[i]-1;
 			while(ll < rr){
-				mid = (l+r)>>1;
-				if(cp[mid] < k-tag[i]) l = mid+1;
-				else r = mid;
+				mid = (ll+rr)>>1;
+				if(cp[mid] < k-tag[i]) ll = mid+1;
+				else rr = mid;
 			}
 			cnt += ll - start[i];
 		}
