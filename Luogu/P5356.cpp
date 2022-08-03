@@ -2,7 +2,7 @@
 #include <iostream>
 #include <cmath>
 #include <algorithm>
-using std::sort;
+using std::sort, std::min;
 
 const int Maxn = 1e5+5, Maxsq = 1e4+5;
 int a[Maxn], cp[Maxn], start[Maxsq], end[Maxsq], tag[Maxsq], tmp[Maxn];
@@ -44,8 +44,9 @@ int main(){
 		maxai = a[i]>maxai?a[i]:maxai;
 	}
 //	block = std::min(n, 150);
-	if(n == 1) block = 1;
-	else block = 2*sqrt((double(n)))*(log(n)/log(2));
+//	if(n == 1) block = 1;
+//	else block = 2*sqrt((double(n)))*(log(n)/log(2));
+	block = min(150, int(sqrt(n)));
 	num = n/block;
 	for(int i=0; i<num; i++){
 		start[i] = i*block;

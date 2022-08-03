@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include <time.h>
 
-const int Maxadd = 1e3;
+const int Maxadd = 1e2;
 int n, m, r, p, mode, x, y;
 int q, ai, l;
 int k, opt;
@@ -12,10 +12,10 @@ int main(){
 	freopen("data.in", "w", stdout);
 	
 	srand(time(0));
-	n = 1e5; q = 1e5;
+	n = 1e1; q = 1e1;
 	printf("%d %d\n", n, q);
 	for(int i=0; i<n; i++){
-		ai = rand()%500;
+		ai = rand()%50;
 		printf("%d ", ai);
 	}
 	printf("\n");
