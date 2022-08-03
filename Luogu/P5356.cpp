@@ -5,6 +5,7 @@
 using std::sort, std::min;
 
 const int Maxn = 1e5+5, Maxsq = 1e4+5;
+//const int Maxn = 1e2+5, Maxsq = 1e2+5;
 int a[Maxn], cp[Maxn], start[Maxsq], end[Maxsq], tag[Maxsq], tmp[Maxn];
 int block, num, maxai;
 void add(int, int, int);
@@ -104,11 +105,12 @@ void add(int l, int r, int k){
 int query(int l, int r, int k){
 	int lb = l/block, rb = r/block;
 	int ll = 0x7fffffff, rr = -0x7fffffff, mid;
+	if(k==0 || r-l+1<k) return -1;
 	for(int i=lb; i<=rb; i++){
-		ll = cp[start[i]] < ll ? cp[start[i]] : ll;
-		rr = cp[end[i]-1] > rr ? cp[end[i]-1] : rr;
+		ll = cp[start[i]]+tag[i] < ll ? cp[start[i]]+tag[i] : ll;
+		rr = cp[end[i]-1]+tag[i] > rr ? cp[end[i]-1]+tag[i] : rr;
 	}
-	while(ll<rr){
+	while(ll < rr){
 		mid = (ll+rr+1)>>1;
 		if(calc(l, r, mid) >= k) rr = mid-1;
 		else ll = mid;
@@ -121,17 +123,17 @@ int calc(int l, int r, int k){ // <k
 	int ll, rr, mid;
 	if(lb != rb){
 		for(int i=l; i==l||i%block!=0; i++){
-			if(a[i] < k) cnt++;
+			if(a[i]+tag[lb] < k) cnt++;
 		}
 		for(int i=r; i==r||i%block!=block-1; i--){
-			if(a[i] < k) cnt++;
+			if(a[i]+tag[rb] < k) cnt++;
 		}
 		for(int i=lb+1; i<rb; i++){
-			if(k > cp[end[i]-1]){
-				cnt+=block;
+			if(k > cp[end[i]-1]+tag[i]){
+				cnt += block;
 				continue;
 			}
-			else if(k < cp[start[i]]) continue;
+			else if(k < cp[start[i]]+tag[i]) continue;
 			ll = start[i]; rr = end[i]-1;
 			while(ll < rr){
 				mid = (ll+rr)>>1;
@@ -143,7 +145,7 @@ int calc(int l, int r, int k){ // <k
 	}
 	else{
 		for(int i=l; i<=r; i++){
-			if(a[i] < k) cnt++;
+			if(a[i]+tag[lb] < k) cnt++;
 		}
 	}
 	return cnt;

@@ -13,9 +13,9 @@ int main(){
 	
 	srand(time(0));
 	n = 1e1; q = 1e1;
-	printf("%d %d\n", n, q);
+	printf("%d 1 %d\n", n, q);
 	for(int i=0; i<n; i++){
-		ai = rand()%50;
+		ai = rand()%5+1;
 		printf("%d ", ai);
 	}
 	printf("\n");
@@ -23,10 +23,10 @@ int main(){
 		opt = rand()%2+1;
 		l = rand()%n+1;
 		r = rand()%n+1;
-		if(opt == 1) k = rand()%(r-l+1);
+		if(opt == 1) k = rand()%(r-l+1)+1;
 		else k = rand()%Maxadd;
 		if(l>r) std::swap(l, r);
-		printf("%d %d %d %d\n", opt, l, r, k);
+		printf("%d %d\n", l, r);
 	}
 
 	return 0;

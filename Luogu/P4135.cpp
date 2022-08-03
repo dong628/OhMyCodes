@@ -5,7 +5,8 @@
 #include <cstring>
 using std::sort, std::unique, std::lower_bound, std::swap;
 
-const int Maxn = 1e5+5, Maxsq = 320;
+const int Block = 300;
+const int Maxn = 1e5+5, Maxsq = 1e3+5;
 int a[Maxn], cp[Maxn], cnt[Maxsq][Maxn];
 int start[Maxsq], end[Maxsq], block, num, ret[Maxn], cntu;
 
@@ -28,6 +29,7 @@ int read() {
 
 int main(){
 	freopen("data.in", "r", stdin);
+//	freopen("std.out", "w", stdout);
 	
 	int n, c, m;
 	n = read(); c = read(), m = read();
@@ -42,8 +44,10 @@ int main(){
 	for(int i=0; i<n; i++){
 		a[i] = lower_bound(cp, cp+cntu, a[i])-cp;
 	}
-	block = sqrt(n); num = n/block+1;
-	for(int i=0; i<num-1; i++){
+//	block = sqrt(n);
+	block = std::min(n, Block);
+	num = n/block+1;
+	for(int i=0; i<num-1; ++i){
 		start[i] = i*block;
 		end[i] = (i+1)*block;
 		for(int j=0; j<cntu; j++){
@@ -56,22 +60,23 @@ int main(){
 	if((num-1)*block != n){
 		start[num-1] = (num-1)*block;
 		end[num-1] = n;
-		for(int j=0; j<cntu; j++){
+		for(int j=0; j<cntu; ++j){
 			cnt[num-1][j] = cnt[num-2][j];
 		}
-		for(int j=start[num-1]; j<end[num-1]; j++){
-			cnt[num-1][a[j]]++;
+		for(int j=start[num-1]; j<end[num-1]; ++j){
+			++cnt[num-1][a[j]];
 		}
 	}
 	else num--;
+//	return 0;
 
 	int l, r, ans = 0;
-
+	
 	while(m--){
 		l = read(); r = read();
 //		scanf("%d %d", &l, &r);
-		l = ((l+ans)%n)+1;
-		r = ((r+ans)%n)+1;
+//		l = ((l+ans)%n)+1;
+//		r = ((r+ans)%n)+1;
 		if(l>r) swap(l, r);
 		ans = calc(l-1, r-1);
 		printf("%d\r\n", ans);
@@ -82,23 +87,27 @@ int main(){
 
 int calc(int l, int r){
 	int lb = l/block, rb = r/block;
-	memset(ret, 0, sizeof(ret));
+	int count = 0;
+//	memset(ret, 0, sizeof(ret));
 	if(lb!=rb){
-		for(int i=l; i==l||i%block!=0; i++)
-			ret[a[i]]++;
-		for(int i=r; i==r||i%block!=block-1; i--)
-			ret[a[i]]++;
-		for(int j=0; j<cntu; j++){
+		for(int i=l; i==l||i%block!=0; ++i)
+			++ret[a[i]];
+		for(int i=r; i==r||i%block!=block-1; --i)
+			++ret[a[i]];
+		for(int j=0; j<cntu; ++j){
 			ret[j] += cnt[rb-1][j]-cnt[lb][j];
+			if(ret[j] && ((ret[j]&1)==0)) ++count;
+			ret[j] = 0;
 		}
+		return count;
 	}
 	else{
-		for(int i=l; i<=r; i++)
-			ret[a[i]]++;
+		for(int i=l; i<=r; ++i)
+			++ret[a[i]];
+		for(int j=0; j<cntu; ++j){
+			if(ret[j] && ((ret[j]&1)==0)) ++count;
+			ret[j] = 0;
+		}
+		return count;
 	}
-	int count = 0;
-	for(int j=0; j<cntu; j++){
-		if(ret[j] && ((ret[j]&1)==0)) count++;
-	}
-	return count;
 }
