@@ -28,7 +28,8 @@ int main(){
 
 	int n, m, u, v; lol w;
 	Edge tmpu, tmpv;
-	scanf("%d %d %d %d", &n, &m, &s, &t);
+	scanf("%d %d", &m, &n);
+	s = 1; t = n;
 
 	tmpu.cur = 0; tmpv.cur = 0;
 	for(int i=0; i<m; i++){
