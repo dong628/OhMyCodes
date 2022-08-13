@@ -4,8 +4,8 @@
 #include <queue>
 using std::queue, std::min;
 
-const int Maxn = 4e1+5, Maxm = 1e2+5, Inf = 0x7fffffff;
-//const int Maxn = 4e4+5, Maxm = 1e5+5;
+//const int Maxn = 4e1+5, Maxm = 1e2+5, Inf = 0x7fffffff;
+const int Maxn = 1e5+5, Maxm = 2e5+5, Inf = 0x7fffffff;
 struct Edge{
 	int to, cur, val;
 	Edge *nxt, *fx;
@@ -19,7 +19,7 @@ int dfs(int, int);
 int main(){
 	freopen("data.in", "r", stdin);
 
-	int ans;
+	int ans = 0;
 	init();
 	while(bfs()){
 		ans += dfs(s, Inf);
@@ -39,20 +39,24 @@ void init(void){
 		end[i] = &head[i];
 		head[i].nxt = &endp;
 	}
-	for(int i=1; i<=nb; i++){
-		addedge(s, i, 2);
+	for(int i=1; i<=nl; i++){
+		addedge(s, i, 1);
 	}
 	scanf("%d", &ml);
 	for(int i=0; i<ml; i++){
 		scanf("%d %d", &x, &y);
-		addedge(x, y+nb, 1);
-		addedge(y+nb, nb+nl+x, 1);
+		addedge(y, x+nl, 1);
+	}
+	for(int i=1; i<=nb; i++){
+		addedge(i+nl, i+nl+nb, 1);
 	}
 	scanf("%d", &ma);
 	for(int i=0; i<ml; i++){
 		scanf("%d %d", &x, &y);
 		addedge(nb+nl+x, nb*2+nl+y, 1);
-		addedge(nb*2+nl+y, t, 1);
+	}
+	for(int i=1; i<=na; i++){
+		addedge(nb*2+nl+i, t, 1);
 	}
 }
 
@@ -60,11 +64,11 @@ void addedge(int from, int to, int val){
 	end[from] -> nxt = &eds[cnt];
 	end[from] = &eds[cnt];
 	eds[cnt].val = val; eds[cnt].cur = 0; eds[cnt].to = to;
-	eds[cnt].fx = &eds[cnt+1]; cnt++;
+	eds[cnt].fx = &eds[cnt+1]; eds[cnt].nxt = &endp; cnt++;
 	end[to] -> nxt = &eds[cnt];
 	end[to] = &eds[cnt];
 	eds[cnt].val = val; eds[cnt].cur = val; eds[cnt].to = from;
-	eds[cnt].fx = &eds[cnt-1]; cnt++;
+	eds[cnt].fx = &eds[cnt-1]; eds[cnt].nxt = &endp; cnt++;
 }
 
 bool bfs(void){
@@ -78,7 +82,7 @@ bool bfs(void){
 		cur = q.front(); q.pop();
 		for(Edge *e=head[cur].nxt; e->to!=-1; e=e->nxt){
 			if(!vis[e->to] && e->val>e->cur){
-				depth[e->to] = depth[cur]++;
+				depth[e->to] = depth[cur]+1;
 				vis[e->to] = true;
 				q.push(e->to);
 			}
