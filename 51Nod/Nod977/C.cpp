@@ -5,7 +5,7 @@
 
 const int Maxn = 1e5+5, Maxu = 1e3+5, Mod = 19260817;
 //const int Maxn = 1e1+5, Maxu = 1e1+5, Mod = 19260817;
-int n, m, gd, block, num;
+int n, m, gd, block, num, cnt4;
 int a[Maxn], tags[Maxu], start[Maxu], end[Maxu], fibarr[Maxn], dbarr[Maxn], fib[Maxn];
 int tagfib1[Maxu], tagfib2[Maxu], tagdck[Maxu], tagdcd[Maxu], tagdbf[Maxu];
 void preil(void);
@@ -15,6 +15,19 @@ void fibadd(int l, int r);
 void update(int id);
 int query(int l, int r);
 int qpow(int di, int vi);
+int read(void){
+	int x = 0, w = 1;
+	char ch = 0;
+	while(ch<'0' || ch>'9'){
+		if(ch == '-') w = -1;
+		ch = getchar();
+	}
+	while(ch>='0' && ch<='9'){
+		x = x*10 + (ch-'0');
+		ch = getchar();
+	}
+	return x*w;
+}
 
 signed main(){
 	freopen("data.in", "r", stdin);
@@ -26,7 +39,8 @@ signed main(){
 	preil();
 //	for(int i=0; i<Maxn; i++) printf("%lld ", dbarr[i]);
 //	for(int i=0; i<Maxn; i++) printf("%lld ", fibarr[i]);
-	block = n/sqrt(n); num = n/block;
+//	block = n/sqrt(n); num = n/block;
+	block = std::min(180, signed(n)); num = n/block;
 	int sum;
 	for(int i=0; i<num; i++){
 		start[i] = block*i;
@@ -34,8 +48,8 @@ signed main(){
 		sum = 0;
 		for(int j=start[i]; j<end[i]; j++){
 			sum += a[j];
-			sum %= Mod;
 		}
+		sum %= Mod;
 		tags[i] = sum;
 	}
 	if(n%block){
@@ -44,20 +58,26 @@ signed main(){
 		sum = 0;
 		for(int j=start[num]; j<end[num]; j++){
 			sum += a[j];
-			sum %= Mod;
 		}
+		sum %= Mod;
 		tags[num] = sum;
 		num++;
 	}
 	int op, l, r, k, d;
 	for(int i=0; i<m; i++){
-		scanf("%lld", &op);
+		op = read();
+//		scanf("%lld", &op);
 //		scanf("%d", &op);
+		l = read(); r = read();
 		switch(op){
-			case 1: scanf("%lld %lld %lld %lld", &l, &r, &k, &d); dcadd(l-1, r-1, k, d); break;
-			case 2: scanf("%lld %lld %lld", &l, &r, &k); dbadd(l-1, r-1, k); break;
-			case 3: scanf("%lld %lld", &l, &r); fibadd(l-1, r-1); break;
-			case 4: scanf("%lld %lld", &l, &r); printf("%lld\n", query(l-1, r-1)); break;
+			case 1: k = read(); d = read(); dcadd(l-1, r-1, k, d); break;
+			case 2: k = read(); dbadd(l-1, r-1, k); break;
+			case 3: fibadd(l-1, r-1); break;
+			case 4: printf("%lld\n", query(l-1, r-1)); break;
+//			case 1: scanf("%lld %lld %lld %lld", &l, &r, &k, &d); dcadd(l-1, r-1, k, d); break;
+//			case 2: scanf("%lld %lld %lld", &l, &r, &k); dbadd(l-1, r-1, k); break;
+//			case 3: scanf("%lld %lld", &l, &r); fibadd(l-1, r-1); break;
+//			case 4: cnt4++; scanf("%lld %lld", &l, &r); printf("%lld\n", query(l-1, r-1)); break;
 //			case 1: scanf("%d %d %d %d", &l, &r, &k, &d); dcadd(l-1, r-1, k, d); break;
 //			case 2: scanf("%d %d %d", &l, &r, &k); dbadd(l-1, r-1, k); break;
 //			case 3: scanf("%d %d", &l, &r); fibadd(l-1, r-1); break;
@@ -87,26 +107,31 @@ void preil(void){
 
 void dcadd(int l, int r, int k, int d){
 	d %= Mod;
-	int lb = l/block, rb = r/block, curval = k, curvar = k+(r-l)*d;
+	int lb = l/block, rb = r/block, curval = k, curvar = k+(start[rb]-l)*d;
 	if(lb != rb){
 		for(int i=l; i==l||i%block!=0; i++){
 			a[i] += curval;
 			tags[lb] += curval;
 			curval += d;
-			a[i] %= Mod; tags[lb] %= Mod; curval %= Mod;
+			a[i] %= Mod; curval %= Mod;
+//if(tags[lb]<0) printf("negativae at dcadd1!\n");
 		}
-		for(int i=r; i==r||i%block!=block-1; i--){
+		tags[lb] %= Mod;
+		for(int i=start[rb]; i<=r; i++){
 			a[i] += curvar;
 			tags[rb] += curvar;
-			curvar -= d;
+			curvar += d;
 			a[i] %= Mod; tags[rb] %= Mod; curvar %= Mod;
+//if(tags[rb]<0) printf("negativae at dcadd2!\n");
 		}
+		tags[rb] %= Mod;
 		for(int i=lb+1; i<rb; i++){
 			tags[i] += (curval+((end[i]-start[i]-1)*d+curval)) * (end[i]-start[i]) / 2;
 			tagdck[i] += curval;
 			tagdcd[i] += d;
 			curval += d*(end[i]-start[i]);
 			tags[i] %= Mod; curval %= Mod; tagdck[i] %= Mod; tagdcd[i] %= Mod;
+//if(tags[i]<0) printf("negativae at dcadd3!\n");
 		}
 	}
 	else{
@@ -114,8 +139,10 @@ void dcadd(int l, int r, int k, int d){
 			a[i] += curval;
 			tags[lb] += curval;
 			curval += d;
-			a[i] %= Mod; tags[lb] %= Mod; curval %= Mod;
+			a[i] %= Mod; curval %= Mod;
+//if(tags[rb]<0) printf("negativae at dcadd4!\n");
 		}
+		tags[lb] %= Mod;
 	}
 }
 
@@ -128,20 +155,25 @@ void dbadd(int l, int r, int k){
 			a[i] += curval;
 			tags[lb] += curval;
 			curval *= gd;
-			a[i] %= Mod; tags[lb] %= Mod; curval %= Mod;
-		}
+			a[i] %= Mod; curval %= Mod;
+//if(tags[lb]<0) printf("negativae at dbadd!\n");
+		} 
+		tags[lb] %= Mod;
 		for(int i=start[rb]; i<=r; i++){
 			a[i] += curvar;
 			tags[rb] += curvar;
 			curvar *= gd;
-			a[i] %= Mod; tags[rb] %= Mod; curvar %= Mod;
+			a[i] %= Mod; curvar %= Mod;
+//if(tags[rb]<0) printf("negativae at dbadd!\n");
 		}
+		tags[rb] %= Mod;
 		for(int i=lb+1; i<rb; i++){
 //			tags[i] += calcdb(curval, gd, end[i]-start[i]);
-			tags[i] += ((dbarr[end[i]-l]-dbarr[start[i]-l])%Mod+Mod)*k;
+			tags[i] += ((((dbarr[end[i]-l]-dbarr[start[i]-l])%Mod)+Mod*2)%Mod)*k;
 			tagdbf[i] += curval;
 			curval *= qpow(gd, end[i]-start[i]);
 			tags[i] %= Mod; tagdbf[i] %= Mod; curval %= Mod;
+//if(tags[i]<0) printf("negativae at dbadd!\n");
 		}
 	}
 	else{
@@ -149,8 +181,10 @@ void dbadd(int l, int r, int k){
 			a[i] += curval;
 			tags[lb] += curval;
 			curval *= gd;
-			a[i] %= Mod; tags[lb] %= Mod; curval %= Mod;
+			a[i] %= Mod; curval %= Mod;
+//if(tags[lb]<0) printf("negativae at dbadd!\n");
 		}
+		tags[lb] %= Mod;
 	}
 }
 
@@ -161,20 +195,25 @@ void fibadd(int l, int r){
 			a[i] += fib[curval];
 			tags[lb] += fib[curval];
 			curval++;
-			a[i] %= Mod; tags[lb] %= Mod;
+			a[i] %= Mod;
+//if(tags[lb]<0) printf("negativae at fibadd!\n");
 		}
+		tags[lb] %= Mod;
 		for(int i=r; i==r||i%block!=block-1; i--){
 			a[i] += fib[curvar];
 			tags[rb] += fib[curvar];
 			curvar--;
-			a[i] %= Mod; tags[rb] %= Mod;
+			a[i] %= Mod;
+//if(tags[rb]<0) printf("negativae at fibadd!\n");
 		}
+		tags[rb] %= Mod;
 		for(int i=lb+1; i<rb; i++){
-			tags[i] += (fibarr[end[i]-l]-fibarr[start[i]-l])%Mod+Mod;
+			tags[i] += ((fibarr[end[i]-l]-fibarr[start[i]-l])%Mod)+Mod*2;
 			tagfib2[i] += fib[curval];
 			tagfib1[i] += fib[curval-1];
 			curval += end[i]-start[i];
 			tags[i] %= Mod; tagfib2[i] %= Mod; tagfib1[i] %= Mod;
+//if(tags[i]<0) printf("negativae at fibadd!\n");
 		}
 	}
 	else{
@@ -183,7 +222,9 @@ void fibadd(int l, int r){
 			tags[lb] += fib[curval];
 			curval++;
 			a[i] %= Mod; tags[lb] %= Mod; 
+//if(tags[lb]<0) printf("negativae at fibadd!\n");
 		}
+		tags[lb] %= Mod;
 	}
 }
 
@@ -194,8 +235,8 @@ void update(int id){
 //	printf("\n");
 	int tmp;
 	for(int i=start[id]; i<end[id]; i++){
-		a[i] += curdc; curdc += tagdcd[id]; curdc %= Mod; a[i] %= Mod;
-		a[i] += curdb; curdb *= gd; curdb %= Mod; a[i] %= Mod;
+		a[i] += curdc; curdc += tagdcd[id]; curdc %= Mod;
+		a[i] += curdb; curdb *= gd; curdb %= Mod;
 		a[i] += curfib2; tmp = curfib1; curfib1 = curfib2; curfib2 += tmp; curfib2 %= Mod;
 		a[i] %= Mod;
 	}
@@ -211,23 +252,24 @@ int query(int l, int r){
 		update(lb);
 		for(int i=l; i==l||i%block!=0; i++){
 			ans += a[i];
-			ans %= Mod;
 		}
+		ans %= Mod;
 		update(rb);
 		for(int i=r; i==r||i%block!=block-1; i--){
 			ans += a[i];
-			ans %= Mod;
 		}
+		ans %= Mod;
 		for(int i=lb+1; i<rb; i++){
 			ans += tags[i];
-			ans %= Mod;
 		}
+		ans %= Mod;
 	}
 	else{
+		update(lb);
 		for(int i=l; i<=r; i++){
 			ans += a[i];
-			ans %= Mod;
 		}
+		ans %= Mod;
 	}
 	return ans;
 }

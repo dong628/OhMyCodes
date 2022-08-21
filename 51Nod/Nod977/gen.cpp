@@ -13,7 +13,7 @@ int main(){
 	freopen("data.in", "w", stdout);
 	
 	srand(time(0));
-	n = 10000; m = 10000; q = 10;
+	n = 100000; m = 100000; q = 1145;
 	printf("%d %d %d\n", n, m, q);
 	for(int i=0; i<n; i++){
 		printf("%d ", rand()%10000);
