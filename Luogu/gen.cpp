@@ -13,22 +13,10 @@ int main(){
 	freopen("data.in", "w", stdout);
 	
 	srand(time(0));
-	n = 50; q = rand()%n;
-	printf("%d %d\n", n, q);
+	n = 1e6;
+	printf("%d\n", n);
 	for(int i=0; i<n; i++){
-		for(int j=0; j<n; j++){
-			tmp = bool(rand()%2);
-			xh[i][j] = tmp;
-		}
-	}
-	for(int i=0; i<n; i++){
-		for(int j=0; j<n; j++){
-			if(xh[i][j]){
-				putchar('Y');
-			}
-			else putchar('N');
-		}
-		printf("\n");
+		printf("%d %d\n", rand()%(n/100)+1, rand()%(n/100)+1);
 	}
 
 	return 0;
