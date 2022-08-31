@@ -1,6 +1,6 @@
 # 我的刷题记录&代码
 
-# 当前主题库：洛谷-全程NOIP计划
+# 当前主题库：无
 
 题目按照所属OJ分类归档。洛谷RemoteJudge只有CodeForces会放入对应目录。
 
@@ -8,12 +8,8 @@
 
 ## 我的博客（会放一些题解什么的）
 
-### 博客园：[https://www.cnblogs.com/dong628/](https://www.cnblogs.com/dong628/)
+### GitHub Page：[https://blog.tflsdjl.top](https://blog.tflsdjl.top)
 
 ### 洛谷：[https://www.luogu.com.cn/blog/tfls-djl/](https://www.luogu.com.cn/blog/tfls-djl/)（早期作品）
 
-### Hexo：[https://dong628.github.io/](https://dong628.github.io/)（效果更好，但国内访问慢）
-
-
-
-（2021.7.31更新）
+（2022.8.31更新）
