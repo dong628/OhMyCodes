@@ -4,7 +4,7 @@
 #include <cstring>
 using std::queue, std::min;
 
-const int Inf = 0x7fffffff, Maxn = 35;
+const int Inf = 0x7fffffff, Maxn = 155*2;
 struct Edge{
 	int to, cur, val;
 	Edge *fx;
@@ -13,8 +13,10 @@ void addedge(int, int, int);
 bool bfs(void);
 int dfs(int, int);
 int s, t, depth[Maxn], cnt[Maxn];
-int ansi[Maxn], ansj[Maxn][Maxn], cnta[Maxn], fa[Maxn];
+// int ansi[Maxn], ansj[Maxn][Maxn], cnta[Maxn], fa[Maxn];
 bool vis[Maxn];
+queue <int> ansq;
+/*
 int head(int a){
 	if(fa[a] == a) return a;
 	return head(fa[a]);
@@ -22,6 +24,8 @@ int head(int a){
 void merge(int a, int b){
 	fa[head(a)] = head(b);
 }
+*/
+void search(int);
 
 int main(){
 	freopen("data.in", "r", stdin);
@@ -40,6 +44,7 @@ int main(){
 	while(bfs()){
 		ans += dfs(s, Inf);
 	}
+/*
 	for(int i=1; i<=n; i++){
 		fa[i] = i;
 	}
@@ -60,6 +65,19 @@ int main(){
 			printf("%d ", ansj[i][j]);
 		}
 		printf("\n");
+	}
+*/
+	memset(vis, 0, sizeof(vis));
+	vis[s] = true;
+	for(int i=1; i<=n; i++){
+		if(!vis[i]){
+			search(i);
+			while(!ansq.empty()){
+				printf("%d ", ansq.front());
+				ansq.pop();
+			}
+			printf("\n");
+		}
 	}
 	printf("%d", n-ans);
 
@@ -113,4 +131,15 @@ int dfs(int cur, int flow){
 	}
 	if(out == 0) depth[cur] = 0;
 	return out;
+}
+
+void search(int rt){
+	ansq.push(rt);
+	vis[rt] = true;
+	rt = rt*2-1;
+	for(int i=0; i<cnt[rt]; i++){
+		if(!vis[mapp[rt][i].to/2] && mapp[rt][i].cur == 1){
+			search(mapp[rt][i].to/2);
+		}
+	}
 }
