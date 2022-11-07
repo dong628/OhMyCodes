@@ -1,21 +1,36 @@
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
+#include <string>
+#include <sstream>
+using std::to_string, std::string;
+
 
 int main(){
-	long long cnt = 0;
+	long long cnt = 0, wacnt = 0, accnt = 0, num;
+	printf("Input data amount: ");
+	scanf("%lld", &num);
+	string strgen;
 
-	while(true){
+//	while(true){
+	for(int i=0; i<num; i++){
 		cnt++;
-		system("./gen");
+		strgen = "echo " + to_string(cnt) + " | ./gen";
+//		printf("%s", strgen.c_str());
+		system(strgen.c_str());
 		system("./djl > djl.out");
 		system("./std > std.out");
 		if(system("diff std.out djl.out")){
 			printf("Test %lld: Wrong answer!\n", cnt);
-			return 0;
+			wacnt++;
+//			return 0;
 		}
-		printf("Test %lld: Accepted!\n", cnt);
+		else{
+			printf("Test %lld: Accepted!\n", cnt);
+			accnt++;
+		}
 	}
+	printf("Ac/All: %lld/%lld = %.3lf", accnt, num, double(accnt)/num);
 
 	return 0;
 }
