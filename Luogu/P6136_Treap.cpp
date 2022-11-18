@@ -1,7 +1,7 @@
 #include <cstdio>
 #include <iostream>
 
-const int Maxn = 1e5+5, Inf = 0x7fffffff;
+const int Maxn = 2e6+5, Inf = 0x7fffffff;
 struct Node{
 	Node *ls, *rs;
 	int pri, val, size;
@@ -17,22 +17,29 @@ int main(){
 	freopen("data.in", "r", stdin);
 	
 	srand(114514);
-	int t, opt, x;
+	int t, opt, x, n, last = 0, ans = 0;
 	leaf.size = 0; leaf.val = 0; leaf.ls = &leaf; leaf.rs = &leaf;
 	Node *root = init();
-	scanf("%d", &t);
+	scanf("%d %d", &n, &t);
+	for(int i=0; i<n; i++){
+		scanf("%d", &x);
+		insert(root, x);
+	}
 
 	while(t--){
 		scanf("%d %d", &opt, &x);
+		x ^= last;
 		switch(opt){
 			case 1: insert(root, x);			break;
 			case 2: del(root, x);				break;
-			case 3: printf("%d\n", rank(root, x)-1);	break;
-			case 4: printf("%d\n", kth(root, x+1));		break;
-			case 5: printf("%d\n", pre(root, x));		break;
-			case 6: printf("%d\n", nxt(root, x));		break;
+			case 3: last = rank(root, x)-1; ans ^= last;	break;
+			case 4: last = kth(root, x+1); ans ^= last;	break;
+			case 5: last = pre(root, x); ans ^= last;	break;
+			case 6: last = nxt(root, x); ans ^= last;	break;
 		}
 	}
+	
+	printf("%d", ans);
 
 	return 0;
 }
