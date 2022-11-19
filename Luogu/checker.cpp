@@ -23,7 +23,7 @@ int main(){
 		if(system("diff std.out djl.out")){
 			printf("Test %lld: Wrong answer!\n", cnt);
 			wacnt++;
-//			return 0;
+			return 0;
 		}
 		else{
 			printf("Test %lld: Accepted!\n", cnt);
