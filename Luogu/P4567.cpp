@@ -37,12 +37,15 @@ int main(){
 		}
 		else if(opt == 'I'){
 			input(6); scanf("%d", &n); getchar();
+//			while(getchar() != '\n');
 			tcur = cur;
 			for(int i=0; i<n; i++){
 				tmp = getchar();
+/*
 				if(tmp == '\n' || tmp == '\r'){
 					i--; continue;
 				}
+*/
 				insert(cur, tmp);
 				cur++;
 			}
@@ -63,7 +66,7 @@ int main(){
 			input(6); scanf("%d", &n); getchar();
 			rotate(cur, n);
 		}
-		else{
+		else if(opt == 'N'){
 			input(4); cur++;
 		}
 /*
@@ -71,6 +74,7 @@ int main(){
 		output(root);
 		putchar('\n');
 */
+
 	}
 
 	return 0;
@@ -85,13 +89,12 @@ void split(Node *rt, int rk, Node *&spl, Node *&spr){
 		spl = spr = &leaf;
 		return;
 	}
+	pushd(rt);
 	if(rt -> ls -> size <= rk - 1){
-		pushd(rt);
 		spl = rt;
 		split(rt -> rs, rk-(rt->ls->size)-1, rt -> rs, spr);
 	}
 	else{
-		pushd(rt);
 		spr = rt;
 		split(rt -> ls, rk, spl, rt -> ls);
 	}
