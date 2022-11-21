@@ -26,7 +26,9 @@ int main(){
 			return 0;
 		}
 		else{
-			printf("Test %lld: Accepted!\n", cnt);
+//			printf("Test %lld: Accepted!\n", cnt);
+			printf("%lld:AC ", cnt);
+			fflush(stdout);
 			accnt++;
 		}
 	}
