@@ -1,13 +1,15 @@
 #include <cstdio>
 #include <iostream>
 #include <algorithm>
+#include <cmath>
 #include <cstring>
 
+const double d = 0.9;
 const int Maxn = 1e6+5;
 int hash[Maxn], a1[Maxn], b1[Maxn], a2[Maxn], b2[Maxn];
 int arrt1[Maxn], leat1[Maxn], arrt2[Maxn], leat2[Maxn];
 int stat1[Maxn], stat2[Maxn];
-int n, m1, m2, m, cnt = 1;
+int n, m1, m2, m, cnt = 1, ct1;
 int calc(int);
 
 int main(){
@@ -48,12 +50,31 @@ int main(){
 			r = rmid;
 	}
 
-	int ans = 0;
-	for(int i=std::max(l-200, 0); i<=std::min(r+100, n); i++){
-		ans = std::max(ans, calc(i));
+	int ans = calc(l);
+
+//	srand(114514);
+	double t = 3000;
+	int cur = l, tmp, last, curc = calc(cur), lascur;
+	while(double(clock())/CLOCKS_PER_SEC < 0.9){
+	t = 3000;
+	while(t > 1e-15){
+		lascur = cur;
+		last = curc;
+		cur = rand()%(n+1);
+		curc = calc(cur);
+		if(curc > last){
+			ans = std::max(curc, ans);
+		}
+		else if(exp(-abs(curc-last)/t)*RAND_MAX < rand()){
+			cur = lascur;
+			curc = last;
+		}
+		t *= d;
 	}
-	
-	if(ans == 84780) ans = 84960;
+	ct1++;
+	}
+
+//	if(ans == 84780) ans = 84960;
 	printf("%d", ans);
 
 	return 0;
