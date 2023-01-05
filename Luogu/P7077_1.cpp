@@ -30,8 +30,9 @@ int main(){
 	}
 
 	tp(0);
-
-
+	for(int i=cnt-1; i>=0; i--){
+		
+	}
 
 	return 0;
 }
