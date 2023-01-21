@@ -15,9 +15,7 @@ void prework(void);
 int amax(int, int), bmax(int, int), amin(int, int), bmin(int, int), posmin(int, int), negmax(int, int);
 
 int main(){
-//	freopen("game.in", "r", stdin);
-	freopen("data.in", "r", stdin);
-//	freopen("game.out", "w", stdout);
+//	freopen("data.in", "r", stdin);
 	
 	scanf("%d %d %d", &n, &m, &q);
 	for(int i=1; i<=n; i++){
