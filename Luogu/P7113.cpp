@@ -1,9 +1,10 @@
 #include <cstdio>
 #include <iostream>
 #include <vector>
-using std::vector;
+#define int __int128
+using namespace std;
 
-typedef unsigned long long lol;
+typedef __int128 lol;
 const int Maxn = 1e5+5;
 lol gcd(lol xx, lol yy){
 	if(xx%yy==0) return yy;
@@ -18,16 +19,44 @@ int n, m, sp[Maxn], c, csp, x;
 bool lsp[Maxn], sj[Maxn];
 vector<int> mapp[Maxn];
 
-int main(){
-	freopen("data.in", "r", stdin);
-	freopen("data.out", "w", stdout);
+inline unsigned int read(){
+    unsigned int x=0,f=1;
+    char ch=getchar();
+    while(ch<'0'||ch>'9'){
+        if(ch=='-')
+            f=-1;
+        ch=getchar();
+    }
+    while(ch>='0'&&ch<='9'){
+        x=x*10+ch-'0';
+        ch=getchar();
+    }
+    return x*f;
+}
 
-	scanf("%d %d", &n, &m);
+inline void print(unsigned int x){
+    if(x<0){
+        putchar('-');
+        x=-x;
+    }
+    if(x>9)
+        print(x/10);
+    putchar(x%10+'0');
+}
+
+signed main(){
+//	freopen("data.in", "r", stdin);
+//	freopen("data.out", "w", stdout);
+
+//	scanf("%d %d", &n, &m);
+	n = read(); m = read();
 	for(int i=1; i<=n; i++){
 		ans[i].p=0; ans[i].q=1;
-		scanf("%d", &c);
+		c = read();
+//		scanf("%d", &c);
 		for(int j=1; j<=c; j++){
-			scanf("%d", &x);
+			x = read();
+//			scanf("%d", &x);
 			mapp[i].push_back(x);
 			lsp[x] = true;
 			cnt[i]++;
@@ -41,7 +70,8 @@ int main(){
 	}
 	for(int i=1; i<=n; i++){
 		if(sj[i]){
-			printf("%llu %llu\n", ans[i].p, ans[i].q);
+			print(ans[i].p); putchar(' '); print(ans[i].q); putchar('\n');
+//			printf("%lld %lld\n", ans[i].p, ans[i].q);
 		}
 	}
 
