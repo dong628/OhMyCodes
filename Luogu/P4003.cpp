@@ -1,13 +1,13 @@
 #include <cstdio>
 #include <iostream>
-
 #include <cstring>
 #include <queue>
 #include <vector>
+#define DEBUG
 using std::min, std::queue;
 
 //const int Maxn = 1e2+5, Inf = 0x3f3f3f3f;
-const int Maxn = 6e3+5, Inf = 0x3f3f3f3f;
+const int Maxn = 3e4+5, Inf = 0x3f3f3f3f;
 struct Edge{
 	int from, to, val, cur, cos, fx;
 } pre[Maxn], tmp;
@@ -33,19 +33,31 @@ int dec(int, int, int);
 int main(){
 	freopen("data.in", "r", stdin);
 
-	int indp, tb, ppc, valid = 0, ipj;
+	int indp, tb, ppc, valid = 0, ipj, valid1 = 0;
 	scanf("%d %d", &n, &m);
 	s = 0, t = (n+2)*(m+2);
 	for(int i=1; i<=n; i++){
 		for(int j=1; j<=m; j++){
 			scanf("%d", &tb);
+			#ifdef DEBUG
+			printf("--- Point %d %d ---\n", i, j);
+			#endif
 			indp = i * (m + 2) + j;
 			ipj = i + j;
 			ppc = popcount(tb);
 			if((ipj & 1) == 0) addedge(s, indp, ppc, 0);
 			else addedge(indp, t, ppc, 0);
-			if(ipj & 1) valid += ppc;
-			m += 2;
+			if(ipj & 1){
+				valid += ppc;
+			}
+			else{
+				valid1 += ppc;
+				connect(dec(i, j, 0), dec(i-1, j, 2), 0, 0);
+				connect(dec(i, j, 1), dec(i, j+1, 3), 0, 0);
+				connect(dec(i, j, 2), dec(i+1, j, 0), 0, 0);
+				connect(dec(i, j, 3), dec(i, j-1, 1), 0, 0);
+			}
+//			m += 2;
 			if(tb == 0){
 				continue;
 			}
@@ -68,10 +80,10 @@ int main(){
 				connect(dec(i, j, 1), dec(i, j, 3), 1, ipj & 1);
 			}
 			else if(tb == 4){
-				connect(indp, dec(i, j, 3), 0, ipj & 1);
-				connect(dec(i, j, 3), dec(i, j, 2), 1, ipj & 1);
-				connect(dec(i, j, 3), dec(i, j, 0), 1, ipj & 1);
-				connect(dec(i, j, 3), dec(i, j, 1), 2, ipj & 1);
+				connect(indp, dec(i, j, 2), 0, ipj & 1);
+				connect(dec(i, j, 2), dec(i, j, 1), 1, ipj & 1);
+				connect(dec(i, j, 2), dec(i, j, 3), 1, ipj & 1);
+				connect(dec(i, j, 2), dec(i, j, 0), 2, ipj & 1);
 			}
 			else if(tb == 5){
 				connect(indp, dec(i, j, 0), 0, ipj & 1);
@@ -143,7 +155,7 @@ int main(){
 				connect(indp, dec(i, j, 3), 0, ipj & 1);
 				connect(indp, dec(i, j, 1), 0, ipj & 1);
 			}
-			m -= 2;
+//			m -= 2;
 		}
 	}
 
@@ -151,7 +163,7 @@ int main(){
 		addflow();
 	}
 
-	if(maxflow == valid){
+	if(maxflow == valid && valid == valid1){
 		printf("%d", mincost);
 	}
 	else printf("-1");
@@ -161,8 +173,10 @@ int main(){
 
 void connect(int u, int v, int cos, int rev){
 	Edge tmp;
-//	if(!rev) printf("%d %d 1 %d\n", u, v, cos);
-//	else printf("%d %d 1 %d\n", v, u, cos);
+	#ifdef DEBUG
+	if(!rev) printf("%d %d 1 %d\n", u, v, cos);
+	else printf("%d %d 1 %d\n", v, u, cos);
+	#endif
 
 	tmp.cos = rev ? -cos : cos;
 	tmp.from = u; tmp.to = v;
@@ -181,7 +195,9 @@ void connect(int u, int v, int cos, int rev){
 
 void addedge(int u, int v, int val, int cos){
 	Edge tmp;
-//	printf("%d %d %d %d\n", u, v, val, cos);
+	#ifdef DEBUG
+	printf("%d %d %d %d\n", u, v, val, cos);
+	#endif
 
 	tmp.cos = cos;
 	tmp.from = u; tmp.to = v;
@@ -228,17 +244,23 @@ void addflow(void){
 	mincost += flow[t]*dis[t];
 	Edge i;
 	for(i=pre[t]; i.to!=s; i=pre[i.to]){
-//		printf("%d ", i.to);
+		#ifdef DEBUG
+		printf("%d ", i.to);
+		#endif
 		mapp[i.to][i.fx].cur += flow[t];
 		mapp[i.from][mapp[i.to][i.fx].fx].cur -= flow[t];
 	}
-//	printf("\n");
+	#ifdef DEBUG
+	printf("\n");
+	#endif
 	mapp[i.to][i.fx].cur += flow[t];
 	mapp[i.from][mapp[i.to][i.fx].fx].cur -= flow[t];
 }
 
 int dec(int x, int y, int face){
 	int ans;
+	ans = x * (m + 2) + y + (face + 1) * t;
+/*
 	if(face == 0){
 		ans = (n+1)*(y-1)+x+t;
 	}
@@ -251,5 +273,6 @@ int dec(int x, int y, int face){
 	else{
 		ans = (m+1)*(x-1)+y+(n+1)*m+t;
 	}
+*/
 	return ans;
 }
