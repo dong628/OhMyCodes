@@ -39,6 +39,10 @@ int main(){
 		addedge(seg[i].rbegin() -> second, t, query(n, seg[i].rbegin() -> first));
 	}
 
+	while(bfs()){
+		maxflow += dfs(s, Inf);
+	}
+
 	return 0;
 }
 
