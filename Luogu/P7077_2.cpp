@@ -75,7 +75,7 @@ signed main(){
 	}
 
 	for(int i=1; i<=n; i++){
-		printf("%lld ", a[i]);
+		printf("%lld\n", a[i]);
 	}
 
 	return 0;
