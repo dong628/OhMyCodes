@@ -1,64 +1,193 @@
-#include <bits/stdc++.h>
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
+#include <queue>
+#include <vector>
+
 using namespace std;
 
-#define ll long long
-inline ll read(){
-	ll x=0,sign=0; char s=getchar();
-	while(s>'9'||s<'0')sign|=s=='-',s=getchar();
-	while(s<='9'&&s>='0')x=(x<<1)+(x<<3)+s-'0',s=getchar();
-	return sign?-x:x;
+inline int read() {
+	int x = 0, f = 1; char s = getchar();
+	while (s < '0' || s > '9') { if (s == '-') f = -f; s = getchar(); }
+	while (s >= '0' && s <= '9') { x = x * 10 + s - '0'; s = getchar(); }
+	return x * f;
 }
 
-const int N=1e5+5;
-const int mod=998244353;
+const int N = 100100;
+const int mod = 998244353;
 
-int n,m,c,a[N],deg[N],func[N];
-int tp[N],pos[N],val[N];
-ll mu=1,mul[N],dp[N],add[N];
-vector <int> e[N];
-queue <int> q;
+int n;
 
-bool vis[N];
-void dfs(int id){
-	vis[id]=1,mul[id]=(tp[id]==2?val[id]:1);
-	for(int it:e[id]){
-		if(!vis[it])dfs(it);
-		mul[id]=mul[id]*mul[it]%mod;
+int a[N];
+
+int m;
+
+struct operation {
+	int opt;
+	int pos, val;
+	vector<int> g;
+} T[N];
+
+int mul[N];
+
+void calc(int u) {
+	if (mul[u] != -1) return;
+
+	switch (T[u].opt) {
+		case 1: {
+			mul[u] = 1;
+
+			break;
+		}
+
+		case 2: {
+			mul[u] = T[u].val;
+
+			break;
+		}
+
+		case 3: {
+			mul[u] = 1;
+			for (int i = 0; i < (int)T[u].g.size(); i ++) {
+				int v = T[u].g[i];
+				calc(v);
+				mul[u] = 1ll * mul[u] * mul[v] % mod;
+			}
+
+			break;
+		}
 	}
 }
 
-int main(){
-	freopen("data.in", "r", stdin);
+int Q;
+int idx[N];
 
-	n=read(); for(int i=1;i<=n;i++)a[i]=read();
-	m=read();
-	for(int i=1;i<=m;i++){
-		tp[i]=read();
-		if(tp[i]==1)pos[i]=read(),val[i]=read();
-		else if(tp[i]==2)val[i]=read();
-		else{
-			c=read();
-			while(c--){
-				int to=read();
-				e[i].push_back(to),deg[to]++;
+int b;
+int f[N];
+
+int deg[N];
+
+int k[N];
+
+void topsort() {
+	queue<int> q;
+
+	for (int i = 1; i <= m; i ++)
+		if (deg[i] == 0) q.push(i);
+
+	while (q.size()) {
+		int u = q.front(); q.pop();
+
+		switch (T[u].opt) {
+			case 1: {
+				k[T[u].pos] = (k[T[u].pos] + 1ll * f[u] * T[u].val) % mod; 
+
+				break;
+			}
+
+			case 2: {
+				break;
+			}
+
+			case 3: {
+				for (int j = T[u].g.size() - 1; j >= 0; j --) {
+					int v = T[u].g[j];
+					f[v] = (f[v] + f[u]) % mod;
+					f[u] = 1ll * f[u] * mul[v] % mod;
+					if (-- deg[v] == 0) q.push(v);
+				}
+
+				break;
 			}
 		}
-	} c=read();
-	for(int i=1;i<=m;i++)if(!vis[i]&&!deg[i])dfs(i);
-	for(int i=1;i<=c;i++)func[i]=read();
-	for(int i=c,f=func[i];i;i--,f=func[i]){
-		if(tp[f]==1)dp[f]=(dp[f]+mu);
-		else if(tp[f]==2)mu=mu*val[f]%mod;
-		else dp[f]=(dp[f]+mu),mu=mu*mul[f]%mod;
-	} for(int i=1;i<=m;i++)if(!deg[i])q.push(i);
-	while(!q.empty()){
-		int t=q.front(); q.pop();
-		if(tp[t]==1)add[pos[t]]=(add[pos[t]]+dp[t]*val[t])%mod;
-		ll z=dp[t]; reverse(e[t].begin(),e[t].end());
-		for(int p:e[t]){
-			deg[p]--; if(!deg[p])q.push(p);
-			dp[p]=(dp[p]+z)%mod,z=z*mul[p]%mod;
+	}
+}
+
+int main() {
+	freopen("data.in", "r", stdin);
+
+	n = read();
+
+	for (int i = 1; i <= n; i ++)
+		a[i] = read();
+
+	m = read();
+
+	for (int i = 1; i <= m; i ++) {
+		T[i].opt = read();
+
+		switch (T[i].opt) {
+			case 1: {
+				T[i].pos = read(), T[i].val = read();
+
+				break;
+			}
+
+			case 2: {
+				T[i].val = read();
+
+				break;
+			}
+
+			case 3: {
+				int C = read();
+				for (int j = 1; j <= C; j ++) {
+					int x = read();
+					T[i].g.push_back(x);
+				}
+
+				break;
+			}
+		} 
+	}
+
+	memset(mul, -1, sizeof(mul));
+	for (int i = 1; i <= m; i ++)
+		if (mul[i] == -1) calc(i); 
+
+	Q = read();
+
+	for (int i = 1; i <= Q; i ++)
+		idx[i] = read();
+
+	b = 1;
+	for (int i = Q; i >= 1; i --) {
+		switch (T[idx[i]].opt) {
+			case 1: {
+				f[idx[i]] = (f[idx[i]] + b) % mod;
+
+				break;
+			}
+
+			case 2: {
+				b = 1ll * b * T[idx[i]].val % mod;
+
+				break;
+			}
+
+			case 3: {
+				f[idx[i]] = (f[idx[i]] + b) % mod;
+				b = 1ll * b * mul[idx[i]] % mod;
+
+				break;
+			}
 		}
-	} for(int i=1;i<=n;i++)cout<<(a[i]*mu+add[i])%mod<<" ";
+	}
+
+	for (int u = 1; u <= m; u ++) {
+		if (T[u].opt != 3) continue;
+
+		for (int j = 0; j < (int)T[u].g.size(); j ++) {
+			int v = T[u].g[j];
+			deg[v] ++;
+		} 
+	}
+
+	topsort();
+
+	for (int i = 1; i <= n; i ++)
+		printf("%d ", (1ll * a[i] * b + k[i]) % mod);
+	puts("");
+
 	return 0;
 }

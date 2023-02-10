@@ -3,7 +3,8 @@
 #include <vector>
 #define int long long
 
-const int Maxn = 1e5+5, Mod = 998244353;
+//const int Maxn = 1e5+5, Mod = 998244353;
+const int Maxn = 1e2+5, Mod = 998244353;
 int a[Maxn], p[Maxn], v[Maxn], in[Maxn], c[Maxn], call[Maxn], mul[Maxn], t[Maxn];
 int n, m, q;
 std::vector <int> g[Maxn];
@@ -75,7 +76,7 @@ signed main(){
 	}
 
 	for(int i=1; i<=n; i++){
-		printf("%lld\n", a[i]);
+		printf("%lld ", a[i]);
 	}
 
 	return 0;
