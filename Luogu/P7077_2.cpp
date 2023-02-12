@@ -3,12 +3,12 @@
 #include <vector>
 #define int long long
 
-//const int Maxn = 1e5+5, Mod = 998244353;
-const int Maxn = 1e2+5, Mod = 998244353;
+const int Maxn = 1e5+5, Mod = 998244353;
+//const int Maxn = 1e2+5, Mod = 998244353;
 int a[Maxn], p[Maxn], v[Maxn], in[Maxn], c[Maxn], call[Maxn], mul[Maxn], t[Maxn];
 int n, m, q;
 std::vector <int> g[Maxn];
-std::vector <int> tp1(int);
+std::vector <int> tp1();
 
 signed main(){
 	freopen("data.in", "r", stdin);
@@ -44,7 +44,7 @@ signed main(){
 		in[tmp]++;
 	}
 
-	std::vector <int> upxv = tp1(0);
+	std::vector <int> upxv = tp1();
 	mul[0] = 1;
 	for(int i=1; i<=m; i++) mul[i] = (t[i] == 2 ? v[i] : 1);
 	for(int i=upxv.size()-1; i>=0; i--){
@@ -82,10 +82,12 @@ signed main(){
 	return 0;
 }
 
-std::vector <int> tp1(int s){
+std::vector <int> tp1(){
 	std::vector <int> nxt;
 	int cur = 0, tar;
-	nxt.push_back(s);
+	for(int i=0; i<=m; i++){
+		if(in[i] == 0) nxt.push_back(i);
+	}
 	for( ; ; ){
 		tar = nxt[cur];
 		for(int i=0; i<c[tar]; i++){
