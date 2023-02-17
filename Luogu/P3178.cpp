@@ -40,19 +40,24 @@ signed main(){
 	dfs1(1, 0); dfs2(1, 1);
 	build(1, 1, n);
 
+	int ans;
 	while(m --> 0){
 		scanf("%lld", &opt);
 		if(opt == 1){
 			scanf("%lld %lld", &x, &b);
-			add(1, rank[x], rank[x], b);
+			add(1, dfn[x], dfn[x], b);
 		}
 		else if(opt == 2){
 			scanf("%lld %lld", &x, &b);
-			add(1, rank[x], rank[x]+size[x]-1, b);
+			add(1, dfn[x], dfn[x]+size[x]-1, b);
 		}
 		else{
 			scanf("%lld", &x);
-			printf("%lld\n", query(x));
+			ans = query(x);
+			printf("%lld\n", ans);
+			if(ans == 18017328){
+				ans++;
+			}
 		}
 	}
 
@@ -76,8 +81,9 @@ void dfs1(int cur, int fat){
 }
 
 void dfs2(int cur, int t){
-	dfn[cur] = ts++;
-	rank[ts-1] = cur;
+	dfn[cur] = ts;
+	rank[ts] = cur;
+	ts++;
 	top[cur] = t;
 	if(hson[cur] != 0) dfs2(hson[cur], t);
 	for(int i=0; i<tree[cur].size(); i++){
@@ -110,7 +116,6 @@ void add(int rt, int l, int r, int val){
 	if(seg[rt*2+1].l <= r){
 		add(rt*2+1, max(l, seg[rt*2+1].l), r, val);
 	}
-	return;
 }
 
 int query(int x){
