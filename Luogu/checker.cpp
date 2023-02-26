@@ -15,7 +15,7 @@ int main(){
 //	while(true){
 	for(int i=0; i<num; i++){
 		cnt++;
-		strgen = "echo " + to_string(cnt) + " | ./gen";
+		strgen = "echo " + to_string(cnt+1145) + " | ./gen";
 //		printf("%s", strgen.c_str());
 		system(strgen.c_str());
 		system("./djl > djl.out");
