@@ -1,7 +1,7 @@
 #include <cstdio>
 #include <iostream>
 
-const int Maxt = 1005, Inf = 0x3f3f3f3f;
+const int Maxt = 105, Inf = 0x3f3f3f3f;
 
 struct Matrix{
 	int val[Maxt][Maxt] = {0};
@@ -46,10 +46,13 @@ Matrix pow(Matrix x, int y){
 	return ans;
 }
 
+int mapp[2005];
+
 int main(){
 	freopen("data.in", "r", stdin);
 
-	int n=1000, t, s, e, u, v, w, kn;
+	int n=100, t, s, e, u, v, w, kn;
+
 
 	for(int i=1; i<=n; i++){
 		for(int j=1; j<=n; j++){
@@ -58,10 +61,20 @@ int main(){
 	}
 	scanf("%d %d %d %d", &kn, &t, &s, &e);
 	mat.n = n; mat.m = n;
+	int cnt = 1;
 	for(int i=0; i<t; i++){
-		scanf("%d %d %d", &w, &u, &v);
-		mat.val[u][v] = w;
-		mat.val[v][u] = w;
+		scanf("%d %d %d", &w[i], &u[i], &v[i]);
+		mapp[cnt++] = u[i];
+		mapp[cnt++] = v[i];
+	}
+	int uu, vv;
+	std::sort(mapp+1, mapp+cnt+1);
+	cnt = std::unique(mapp+1, mapp+cnt+1);
+	for(int i=0; i<t; i++){
+		uu = std::lower_bound(mapp+1, mapp+cnt+1, u[i]) - mapp;
+		vv = std::lower_bound(mapp+1, mapp+cnt+1, v[i]) - mapp;
+		mat.val[uu][vv] = w;
+		mat.val[vv][uu] = w;
 	}
 /*
 	for(int i=1; i<=n; i++){
@@ -84,6 +97,8 @@ int main(){
 	}
 */
 
+	s = std::lower_bound(mapp+1, mapp+cnt+1, s) - mapp;
+	e = std::lower_bound(mapp+1, mapp+cnt+1, e) - mapp;
 	printf("%d", ans.val[s][e]);
 
 	return 0;
