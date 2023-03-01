@@ -1,4 +1,5 @@
 #include <cstdio>
+#include <algorithm>
 #include <iostream>
 
 const int Maxt = 105, Inf = 0x3f3f3f3f;
@@ -46,12 +47,13 @@ Matrix pow(Matrix x, int y){
 	return ans;
 }
 
-int mapp[2005];
+const int Maxn = 2005;
+int mapp[Maxn], u[Maxn], v[Maxn], w[Maxn];
 
 int main(){
 	freopen("data.in", "r", stdin);
 
-	int n=100, t, s, e, u, v, w, kn;
+	int n=100, t, s, e, kn;
 
 
 	for(int i=1; i<=n; i++){
@@ -69,12 +71,12 @@ int main(){
 	}
 	int uu, vv;
 	std::sort(mapp+1, mapp+cnt+1);
-	cnt = std::unique(mapp+1, mapp+cnt+1);
+	cnt = std::unique(mapp+1, mapp+cnt+1) - (mapp+1);
 	for(int i=0; i<t; i++){
 		uu = std::lower_bound(mapp+1, mapp+cnt+1, u[i]) - mapp;
 		vv = std::lower_bound(mapp+1, mapp+cnt+1, v[i]) - mapp;
-		mat.val[uu][vv] = w;
-		mat.val[vv][uu] = w;
+		mat.val[uu][vv] = w[i];
+		mat.val[vv][uu] = w[i];
 	}
 /*
 	for(int i=1; i<=n; i++){

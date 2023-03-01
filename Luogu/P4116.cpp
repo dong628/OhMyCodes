@@ -1,5 +1,6 @@
 #include <cstdio>
 #include <iostream>
+#include <algorithm>
 #include <vector>
 using std::max, std::min;
 
@@ -17,7 +18,7 @@ int pfq(int), query(int, int);
 
 int main(){
 	freopen("data.in", "r", stdin);
-	freopen("data.out", "w", stdout);
+//	freopen("data.out", "w", stdout);
 
 	int q, u, v;
 	scanf("%d %d\n", &n, &q);
