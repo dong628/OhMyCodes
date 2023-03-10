@@ -5,13 +5,13 @@
 #include <queue>
 using std::vector, std::min;
 
-//const int Maxn = 1e5+5, Inf = 0x3f3f3f3f;
-const int Maxn = 1e2+5, Inf = 0x3f3f3f3f;
+const int Maxn = 1e5+5, Inf = 0x3f3f3f3f;
+//const int Maxn = 1e2+5, Inf = 0x3f3f3f3f;
 struct Edge{
 	int from, to, val, cur, fx;
 };
 vector <Edge> mapp[Maxn];
-vector <int> fa[25];
+vector <int> fa[250];
 int s, t, depth[Maxn];
 
 void addedge(int, int, int);
@@ -56,8 +56,8 @@ int main(){
 	for(int i=0; i<mapp[s].size(); i++){
 		tar = mapp[s][i].to;
 		for(int j=0; j<mapp[tar].size(); j++){
-			if(mapp[tar][i].cur == 0) continue;
-			fa[mapp[mapp[tar][j].to][0].to - n - 1].push_back(tar - 1);
+			if(mapp[tar][j].cur == 0) continue;
+			fa[mapp[mapp[tar][j].to][1].to - n - 1].push_back(tar - 1);
 		}
 	}
 
@@ -82,7 +82,7 @@ void addedge(int u, int v, int w){
 	r.fx = mapp[u].size();
 	mapp[u].push_back(l);
 	mapp[v].push_back(r);
-	printf("%d -> %d, %d\n", u, v, w);
+//	printf("%d -> %d, %d\n", u, v, w);
 }
 
 bool bfs(void){
@@ -114,6 +114,6 @@ int dfs(int cur, int flow){
 		mapp[mapp[cur][i].to][mapp[cur][i].fx].cur -= tmp;
 		if(flow == 0) break;
 	}
-	if(out = 0) depth[cur] = -1;
+	if(out == 0) depth[cur] = -1;
 	return out;
 }
