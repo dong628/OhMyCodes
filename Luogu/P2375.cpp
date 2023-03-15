@@ -2,8 +2,9 @@
 #include <cstring>
 #include <cstdio>
 
+//const int Maxn = 1e2+5, Mod = 1e9+7;
 const int Maxn = 1e6+5, Mod = 1e9+7;
-int n, pi[Maxn], l, minn[Maxn], lena;
+int n, pi[Maxn], l, minn[Maxn], lena, cnt[Maxn];
 long long ans=1;
 char a[Maxn];
 
@@ -22,13 +23,18 @@ int main(){
 			if(a[i] == a[l]) l++;
 			pi[i] = l;
 		}
-	
+		memset(cnt, 0, sizeof(cnt));
 		for(int i=1; i<lena; i++){
 			l = pi[i];
+			if(l != 0) cnt[i]++;
 			while(l*2 > i+1 && l != 0){
 				l = pi[l-1];
+				cnt[i]++;
 			}
-			ans *= (l+1);
+			cnt[i] += cnt[l-1];
+			if(l != 0){
+				ans *= (cnt[l-1]+2);
+			}
 			ans %= Mod;
 		}
 
