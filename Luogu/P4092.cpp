@@ -1,18 +1,31 @@
 #include <cstdio>
+#include <vector>
 #include <iostream>
+#include <cstring>
+using std::max, std::min;
+
+const int Maxn = 1e5+5;
+//const int Maxn = 1e2+5;
 
 struct Node{
 	int l, r, tag, ttag;
 } seg[4*Maxn];
 
+std::vector <int> tree[Maxn];
+
 int ts = 1;
+int dfn[Maxn], rank[Maxn], size[Maxn], hson[Maxn], top[Maxn], fa[Maxn], depth[Maxn];
+
+void dfs1(int, int), dfs2(int, int), tag(int, int), build(int, int, int), pushdown(int);
+int query(int, int), spq(int);
 
 int main(){
 	freopen("data.in", "r", stdin);
 
-	scanf("%d %d", &n, &q);
+	int n, q, u, v;
+	scanf("%d %d\n", &n, &q);
 	for(int i=1; i<n; i++){
-		scanf("%d %d", &u, &v);
+		scanf("%d %d\n", &u, &v);
 		tree[u].push_back(v);
 		tree[v].push_back(u);
 	}
@@ -25,7 +38,7 @@ int main(){
 	char op;
 	int num;
 	while(q --> 0){
-		scanf("%c %d", &op, &num);
+		scanf("%c %d\n", &op, &num);
 		if(op == 'C'){
 			tag(1, dfn[num]);
 		}
@@ -61,8 +74,8 @@ void dfs2(int cur, int t){
 	ts++;
 	if(hson[cur] != -1) dfs2(hson[cur], t);
 	for(int i=0; i<tree[cur].size(); i++){
-		if(tree[cur][i] == f || tree[cur][i] == hson[cur]) continue;
-		dfs2(tree[cur][i], cur);
+		if(tree[cur][i] == fa[cur] || tree[cur][i] == hson[cur]) continue;
+		dfs2(tree[cur][i], tree[cur][i]);
 	}
 }
 
@@ -77,7 +90,7 @@ void build(int rt, int l, int r){
 
 void tag(int rt, int ind){
 	if(seg[rt].l == seg[rt].r && seg[rt].l == ind){
-		seg[ind].tag = ind;
+		seg[rt].tag = ind;
 		return;
 	}
 	pushdown(rt);
@@ -90,7 +103,7 @@ void tag(int rt, int ind){
 	}
 }
 
-void query(int rt, int ind){
+int query(int rt, int ind){
 	if(seg[rt].l == seg[rt].r && seg[rt].l == ind){
 		return max(seg[rt].tag, seg[rt].ttag);
 	}
@@ -111,5 +124,13 @@ void pushdown(int rt){
 }
 
 int spq(int cur){
-	
+	int tmp;
+	while(top[cur] != 1 || cur != 1){
+		tmp = query(1, dfn[cur]);
+		if(tmp >= dfn[top[cur]] && tmp <= dfn[cur]){
+			return rank[tmp];
+		}
+		else cur = fa[top[cur]];
+	}
+	return 1;
 } 
