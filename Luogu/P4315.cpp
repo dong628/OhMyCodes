@@ -3,8 +3,8 @@
 #include <vector>
 using std::max, std::min, std::make_pair;
 
-const int Maxn = 1e2+5, Inf = 0x7f7f7f7f;
-//const int Maxn = 1e5+5;
+//const int Maxn = 1e2+5, Inf = 0x7f7f7f7f;
+const int Maxn = 1e5+5, Inf = 0x7f7f7f7f;
 
 struct Node{
 	int l, r, max, tagp, tagc;
@@ -38,7 +38,7 @@ int main(){
 		for(int j=0; j<edges[i].size(); j++){
 			if(fa[i] == edges[i][j].first){
 				val[i] = edges[i][j].second;
-				id[i] = ids[i][j];
+				id[ids[i][j]] = i;
 			}
 		}
 	}
@@ -104,6 +104,7 @@ void dfs2(int cur, int t){
 
 void build(int rt, int l, int r){
 	seg[rt].l = l; seg[rt].r = r;
+	seg[rt].tagc = -Inf;
 	if(l == r){
 		seg[rt].max = val[rank[l]];
 		return;
@@ -111,6 +112,7 @@ void build(int rt, int l, int r){
 	int mid = (l + r) >> 1;
 	build(rt*2, l, mid);
 	build(rt*2+1, mid+1, r);
+	seg[rt].max = max(seg[rt*2].max, seg[rt*2+1].max);
 }
 
 void cover(int rt, int l, int r, int v){
@@ -149,7 +151,7 @@ void add(int rt, int l, int r, int v){
 void change(int rt, int ind, int v){
 	if(seg[rt].l == ind && seg[rt].r == ind){
 		seg[rt].max = v;
-		seg[rt].tagc = 0;
+		seg[rt].tagc = -Inf;
 		seg[rt].tagp = 0;
 		return;
 	}
@@ -160,6 +162,7 @@ void change(int rt, int ind, int v){
 	else{
 		change(rt*2+1, ind, v);
 	}
+	seg[rt].max = max(seg[rt*2].max, seg[rt*2+1].max);
 }
 
 int query(int rt, int l, int r){
@@ -178,15 +181,21 @@ int query(int rt, int l, int r){
 }
 
 void pushdown(int rt){
-	if(seg[rt].tagc != 0){
+	if(seg[rt].tagc != -Inf){
 		seg[rt*2].tagc = seg[rt].tagc + seg[rt].tagp;
 		seg[rt*2].max = seg[rt].tagc + seg[rt].tagp;
 		seg[rt*2+1].tagc = seg[rt].tagc + seg[rt].tagp;
 		seg[rt*2+1].max = seg[rt].tagc + seg[rt].tagp;
-		seg[rt].tagc = 1;
+		seg[rt*2].tagp = 0;
+		seg[rt*2+1].tagp = 0;
+		seg[rt].tagc = -Inf;
+		seg[rt].tagp = 0;
+		return;
 	}
 	seg[rt*2].tagp += seg[rt].tagp;
+	seg[rt*2].max += seg[rt].tagp;
 	seg[rt*2+1].tagp += seg[rt].tagp;
+	seg[rt*2+1].max += seg[rt].tagp;
 	seg[rt].tagp = 0;
 }
 
@@ -217,6 +226,7 @@ void spch(int k, int w){
 }
 
 void spco(int u, int v, int w){
+	if(u == v) return;
 	if(depth[u] > depth[v]) std::swap(u, v);
 	while(top[u] != top[v]){
 		if(depth[top[u]] < depth[top[v]]){
